@@ -146,12 +146,14 @@ hackathon-project/
 │   │       └── main.go
 │   ├── internal/
 │   │   ├── config/
+│   │   ├── db/              # sqlc generated code
 │   │   ├── handler/
-│   │   ├── model/
-│   │   ├── repository/
-│   │   └── service/
+│   │   ├── service/
 │   ├── migrations/
 │   │   └── 001_init.sql
+│   ├── queries/             # sqlc query files
+│   │   └── *.sql
+│   ├── sqlc.yaml
 │   ├── go.mod
 │   ├── go.sum
 │   ├── Dockerfile
@@ -171,6 +173,7 @@ hackathon-project/
 | Backend | Go + Echo | Aidan |
 | Backend Hosting | Fly.io | Aidan |
 | Database | PostgreSQL (Docker locally, Fly Postgres in prod) | Aidan |
+| SQL Queries | sqlc (type-safe generated code) | Aidan |
 | Migrations | goose | Aidan |
 | Email | Resend | Aidan |
 
