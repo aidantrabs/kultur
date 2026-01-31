@@ -1,4 +1,4 @@
-.PHONY: dev db-up db-down migrate migrate-down migrate-status build
+.PHONY: dev db-up db-down migrate migrate-down migrate-status build docker-build deploy
 
 # database
 db-up:
@@ -28,3 +28,11 @@ build:
 # sqlc
 sqlc:
 	cd backend && sqlc generate
+
+# docker
+docker-build:
+	cd backend && docker build -t trinbago-api .
+
+# deploy
+deploy:
+	cd backend && fly deploy
