@@ -1,0 +1,9 @@
+-- +goose Up
+ALTER TABLE festivals ADD COLUMN IF NOT EXISTS usual_month VARCHAR(50);
+ALTER TABLE festivals ADD COLUMN IF NOT EXISTS date_2026_start DATE;
+ALTER TABLE festivals ADD COLUMN IF NOT EXISTS date_2026_end DATE;
+
+-- +goose Down
+ALTER TABLE festivals DROP COLUMN IF EXISTS usual_month;
+ALTER TABLE festivals DROP COLUMN IF EXISTS date_2026_start;
+ALTER TABLE festivals DROP COLUMN IF EXISTS date_2026_end;
