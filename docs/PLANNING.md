@@ -529,7 +529,7 @@ GET  /api/unsubscribe/{token}
 
 > "We built this in 4 days. Imagine every festival documented like this. Imagine diaspora kids learning about Hosay before visiting home. Imagine tourists experiencing something real.
 >
-> [App Name]. Your guide to Trinidad's cultural festivals."
+> KULTUR. Your guide to Trinidad's cultural festivals."
 
 ### Remaining Time
 
