@@ -96,7 +96,6 @@ backend/
 │   ├── migrations/             # Database migrations
 │   └── queries/                # sqlc query definitions
 ├── Dockerfile
-├── fly.toml
 └── go.mod
 ```
 
@@ -141,19 +140,25 @@ go build -o bin/server ./cmd/server
 
 ## Deployment
 
-Deployed to Fly.io at [kultur-api.fly.dev](https://kultur-api.fly.dev).
+Deployed to Cloud Run at [kultur-api-971304624476.us-central1.run.app](https://kultur-api-971304624476.us-central1.run.app).
 
 ```bash
-fly deploy
+gcloud run deploy kultur-api \
+  --source . \
+  --region us-central1 \
+  --allow-unauthenticated
 ```
 
-### Secrets
+### Environment Variables
+
+Set via Cloud Run console or CLI:
 
 ```bash
-fly secrets set DATABASE_URL="postgres://..."
-fly secrets set RESEND_API_KEY="re_..."
-fly secrets set ADMIN_API_KEY="..."
-fly secrets set FROM_EMAIL="noreply@kultur-tt.app"
-fly secrets set BASE_URL="https://kultur-api.fly.dev"
-fly secrets set ALLOWED_ORIGINS="https://kultur-tt.app"
+gcloud run services update kultur-api --region us-central1 \
+  --set-secrets="DATABASE_URL=DATABASE_URL:latest" \
+  --set-secrets="RESEND_API_KEY=RESEND_API_KEY:latest" \
+  --set-secrets="ADMIN_API_KEY=ADMIN_API_KEY:latest" \
+  --set-env-vars="FROM_EMAIL=noreply@kultur-tt.app" \
+  --set-env-vars="BASE_URL=https://kultur-api-971304624476.us-central1.run.app" \
+  --set-env-vars="ALLOWED_ORIGINS=https://kultur-tt.app"
 ```
