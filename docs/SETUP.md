@@ -82,18 +82,18 @@ node --version
 npm --version
 ```
 
-#### 5. Install Fly CLI (Optional)
+#### 5. Install Google Cloud SDK (Optional)
 
 Only needed if you want to deploy or access production logs.
 
 ```bash
-brew install flyctl
+brew install google-cloud-sdk
 ```
 
-Login to Fly (requires account):
+Login to GCP (requires account):
 
 ```bash
-fly auth login
+gcloud auth login
 ```
 
 ### Windows (WSL2)
@@ -208,8 +208,8 @@ PUBLIC_DATA_SOURCE=api
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/aidantrabs/trinbago-hackathon.git
-cd trinbago-hackathon
+git clone https://github.com/aidantrabs/kultur.git
+cd kultur
 ```
 
 ### 2. Navigate to Backend
@@ -331,7 +331,7 @@ npm run dev
 ## Project Structure
 
 ```
-trinbago-hackathon/
+kultur/
 ├── backend/               # Go API server
 │   ├── cmd/server/        # Main entry point
 │   ├── internal/          # Internal packages
@@ -383,18 +383,20 @@ npm run build
 npm run preview
 ```
 
-### Deployment (Fly.io)
+### Deployment (Cloud Run)
 
 ```bash
-# Deploy backend
-cd backend
-fly deploy
+# Deploy backend (from project root)
+gcloud run deploy kultur-api \
+  --source ./backend \
+  --region us-central1 \
+  --allow-unauthenticated
 
 # View logs
-fly logs
+gcloud run services logs read kultur-api --region us-central1
 
-# SSH into container
-fly ssh console
+# Stream logs
+gcloud run services logs tail kultur-api --region us-central1
 ```
 
 ---

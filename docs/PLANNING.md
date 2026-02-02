@@ -600,7 +600,7 @@ build-api:
 
 # Deploy
 deploy-api:
-	cd backend && flyctl deploy
+	cd backend && gcloud run deploy kultur-api --source . --region us-central1 --allow-unauthenticated
 ```
 
 ### Commands
