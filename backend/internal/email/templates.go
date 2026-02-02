@@ -73,16 +73,12 @@ const baseTemplate = `<!DOCTYPE html>
             <td style="padding: 40px 16px;">
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" class="container" style="max-width: 560px; margin: 0 auto; width: 100%;">
 
-                    <!-- Header with Logo/Brand -->
+                    <!-- Header with Logo -->
                     <tr>
                         <td style="padding: 0 0 24px 0; text-align: center;">
-                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 auto;">
-                                <tr>
-                                    <td style="background-color: ` + ColorRed + `; padding: 12px 24px; border-radius: 8px;">
-                                        <span style="font-size: 24px; font-weight: 700; color: ` + ColorWhite + `; letter-spacing: 2px;">KULTUR</span>
-                                    </td>
-                                </tr>
-                            </table>
+                            <a href="https://kultur-tt.vercel.app" style="text-decoration: none;">
+                                <img src="https://kultur-tt.vercel.app/logo.png" alt="KULTUR" width="80" height="80" style="display: block; margin: 0 auto; border: 0;" />
+                            </a>
                         </td>
                     </tr>
 
