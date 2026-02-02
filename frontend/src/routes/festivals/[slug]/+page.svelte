@@ -21,6 +21,8 @@
 		gfm: true,
 	});
 
+	let linkCopied = $state(false);
+
 	function getHeritageBadgeClass(heritage: HeritageType): string {
 		const classes: Record<HeritageType, string> = {
 			african: 'bg-heritage-african text-white',
@@ -36,6 +38,18 @@
 		if (!content) return '';
 		return marked.parse(content) as string;
 	}
+
+	async function copyLink() {
+		try {
+			await navigator.clipboard.writeText(window.location.href);
+			linkCopied = true;
+			setTimeout(() => {
+				linkCopied = false;
+			}, 2000);
+		} catch (err) {
+			console.error('Failed to copy link:', err);
+		}
+	}
 </script>
 
 <svelte:head>
@@ -49,7 +63,7 @@
 		<div class="container max-w-6xl mx-auto px-4 py-4">
 			<div class="flex items-center justify-between">
 				<a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
-					<img src="/logo.png" alt="KULTUR" class="h-10 w-10" />
+					<img src="/logo.png" alt="" class="h-10 w-10 logo-img" loading="eager" width="40" height="40" />
 					<span class="text-xl font-bold text-tt-red">KULTUR</span>
 				</a>
 				<nav class="flex items-center gap-4">
@@ -348,12 +362,19 @@
 					</Card.Header>
 					<Card.Content>
 						<div class="flex gap-2">
-							<Button variant="outline" size="sm" class="flex-1">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
-									<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-									<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-								</svg>
-								Copy Link
+							<Button variant="outline" size="sm" class="flex-1" onclick={copyLink}>
+								{#if linkCopied}
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1 text-green-600">
+										<path d="M20 6 9 17l-5-5"/>
+									</svg>
+									Copied!
+								{:else}
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+										<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+										<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+									</svg>
+									Copy Link
+								{/if}
 							</Button>
 						</div>
 					</Card.Content>
