@@ -96,6 +96,11 @@ func main() {
     admin.PUT("/festival-dates/:id", h.UpdateFestivalDate)
     admin.DELETE("/festival-dates/:id", h.DeleteFestivalDate)
 
+    // admin: test emails
+    admin.POST("/test-email/welcome", h.TestWelcomeEmail)
+    admin.POST("/test-email/reminder", h.TestFestivalReminder)
+    admin.POST("/test-email/digest", h.TestWeeklyDigest)
+
     log.Printf("server starting on port %s", cfg.Port)
     e.Logger.Fatal(e.Start(":" + cfg.Port))
 }
