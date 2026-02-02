@@ -45,53 +45,55 @@
 		</div>
 	</header>
 
-	<!-- Hero Section -->
-	<section class="relative bg-linear-to-br from-tt-black via-tt-black to-tt-red/20 text-white">
-		<div class="absolute inset-0 bg-[url('https://www.cultursmag.com/wp-content/uploads/2024/05/Carnival-in-Trinidad-Photo-credit-Hayden-Greene.jpg')] bg-cover bg-center opacity-20"></div>
-		<div class="relative container max-w-6xl mx-auto px-4 py-20 lg:py-32">
-			<div class="max-w-3xl">
-				<h1 class="text-4xl lg:text-6xl font-bold mb-6">
-					Discover Trinidad & Tobago's 
-					<span class="text-tt-gold">Cultural Festivals</span>
-				</h1>
-				<p class="text-lg lg:text-xl text-gray-300 mb-8 leading-relaxed">
-					Your first-timer's guide to 20+ festivals spanning African, Indian, Indigenous, and mixed heritage. 
-					Know what to expect, how to participate, and experience authentic culture.
-				</p>
-				<div class="flex flex-wrap gap-4">
-					<Button href="/festivals" size="lg" class="bg-tt-red hover:bg-tt-red-dark text-white">
-						Explore the Calendar
-						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
-							<path d="m9 18 6-6-6-6"/>
-						</svg>
-					</Button>
-					<Button href="#this-week" variant="outline" size="lg" class="border-white text-black hover:bg-gray-1000">
-						What's Coming Up
-					</Button>
+	<div class="min-h-[calc(100dvh-72px)] flex flex-col">
+		<!-- Hero Section -->
+		<section class="relative bg-linear-to-br from-tt-black via-tt-black to-tt-red/20 text-white flex-1 flex items-center">
+			<div class="absolute inset-0 bg-[url('https://www.cultursmag.com/wp-content/uploads/2024/05/Carnival-in-Trinidad-Photo-credit-Hayden-Greene.jpg')] bg-cover bg-center opacity-20"></div>
+			<div class="relative container max-w-6xl mx-auto px-4 py-12 lg:py-20">
+				<div class="max-w-3xl">
+					<h1 class="text-4xl lg:text-6xl font-bold mb-6">
+						Discover Trinidad & Tobago's
+						<span class="text-tt-gold">Cultural Festivals</span>
+					</h1>
+					<p class="text-lg lg:text-xl text-gray-300 mb-8 leading-relaxed">
+						Your first-timer's guide to 20+ festivals spanning African, Indian, Indigenous, and mixed heritage.
+						Know what to expect, how to participate, and experience authentic culture.
+					</p>
+					<div class="flex flex-wrap gap-4">
+						<Button href="/festivals" size="lg" class="bg-tt-red hover:bg-tt-red-dark text-white">
+							Explore the Calendar
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
+								<path d="m9 18 6-6-6-6"/>
+							</svg>
+						</Button>
+						<Button href="#this-week" variant="outline" size="lg" class="border-white text-black hover:bg-gray-1000">
+							What's Coming Up
+						</Button>
+					</div>
 				</div>
 			</div>
-		</div>
-	</section>
+		</section>
 
-	<!-- Stats Section -->
-	<section class="bg-card border-b">
-		<div class="container max-w-6xl mx-auto px-4 py-8">
-			<div class="grid grid-cols-3 gap-4 text-center">
-				<div>
-					<p class="text-3xl font-bold text-tt-red">{stats.festivals}+</p>
-					<p class="text-sm text-muted-foreground">Cultural Festivals</p>
-				</div>
-				<div>
-					<p class="text-3xl font-bold text-tt-red">{stats.heritageTypes}</p>
-					<p class="text-sm text-muted-foreground">Heritage Types</p>
-				</div>
-				<div>
-					<p class="text-3xl font-bold text-tt-red">{stats.regions}</p>
-					<p class="text-sm text-muted-foreground">Regions Covered</p>
+		<!-- Stats Section -->
+		<section class="bg-card border-b shrink-0">
+			<div class="container max-w-6xl mx-auto px-4 py-8">
+				<div class="grid grid-cols-3 gap-4 text-center">
+					<div>
+						<p class="text-3xl font-bold text-tt-red">{stats.festivals}+</p>
+						<p class="text-sm text-muted-foreground">Cultural Festivals</p>
+					</div>
+					<div>
+						<p class="text-3xl font-bold text-tt-red">{stats.heritageTypes}</p>
+						<p class="text-sm text-muted-foreground">Heritage Types</p>
+					</div>
+					<div>
+						<p class="text-3xl font-bold text-tt-red">{stats.regions}</p>
+						<p class="text-sm text-muted-foreground">Regions Covered</p>
+					</div>
 				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+	</div>
 
 	<!-- This Week Section -->
 	<section id="this-week" class="container max-w-6xl mx-auto px-4 py-12">
