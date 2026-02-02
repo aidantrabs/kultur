@@ -8,13 +8,13 @@
     import { MemoryCard, MemoryForm } from '$lib/components/memories';
     import { NewsletterSignup } from '$lib/components/newsletter';
     import { heritageLabels, regionLabels } from '$lib/types/festival';
-    import type { HeritageType } from '$lib/types/festival';
+    import type { HeritageType, Region, Festival } from '$lib/types/festival';
     import { formatDateRange, getRelativeTime } from '$lib/utils/calendar';
 
     const { data } = $props();
-    const festival = $derived(data.festival);
+    const festival: Festival = $derived(data.festival);
     const memories = $derived(data.memories);
-    const relatedFestivals = $derived(data.relatedFestivals);
+    const relatedFestivals: Festival[] = $derived(data.relatedFestivals);
 
     // Configure marked for safety
     marked.setOptions({

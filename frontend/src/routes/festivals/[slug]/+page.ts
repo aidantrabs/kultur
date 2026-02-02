@@ -3,6 +3,7 @@ import { getMemoriesByFestivalSlug } from '$lib/data/memories';
 import { config } from '$lib/config';
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
+import type { Festival } from '$lib/types/festival';
 import memoriesData from '$lib/data/memories.json';
 
 export const load: PageLoad = async ({ params }) => {
