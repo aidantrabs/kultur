@@ -477,44 +477,6 @@ echo -n "https://kultur-api.fly.dev" | vercel env add PUBLIC_API_URL production
 
 **Solution:** Set up custom domain `kultur-tt.app` with proper DNS (DKIM, SPF, MX records).
 
-### 4. Festival Card Height Inconsistency
-
-**Problem:** Cards in grid had varying heights due to different title/description lengths.
-
-**Solution:** Added flexbox utilities:
-```svelte
-<a class="block group h-full w-full">
-    <Card.Root class="h-full">
-        <Card.Content class="flex-grow flex flex-col">
-            <p class="min-h-[2.5rem] line-clamp-2">{summary}</p>
-            <div class="mt-auto">{date/location}</div>
-        </Card.Content>
-    </Card.Root>
-</a>
-```
-
-### 5. Biome Configuration for Svelte
-
-**Problem:** Initial Biome config used schema 2.x syntax that didn't work with 1.9.x.
-
-**Errors:**
-- `includes` should be `include`
-- `assist` should be `organizeImports`
-
-**Solution:** Used correct 1.9.x schema:
-```json
-{
-    "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-    "files": {
-        "include": ["**/*.ts", "**/*.svelte", "**/*.json"]
-    },
-    "formatter": {
-        "indentStyle": "space",
-        "indentWidth": 4
-    }
-}
-```
-
 ---
 
 ## Security
