@@ -18,8 +18,6 @@ interface CreateMemoryRequest {
 
 interface SubscribeRequest {
 	email: string;
-	digestWeekly?: boolean;
-	festivalReminders?: string[];
 }
 
 /**
@@ -27,6 +25,8 @@ interface SubscribeRequest {
  */
 async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
 	const url = `${API_URL}${endpoint}`;
+
+	console.log('API fetch:', { url, method: options?.method || 'GET' });
 
 	try {
 		const response = await fetch(url, {
@@ -37,11 +37,17 @@ async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> 
 			}
 		});
 
+		console.log('API response status:', response.status);
+
 		if (!response.ok) {
+			const errorText = await response.text();
+			console.error('API error response:', errorText);
 			throw new Error(`API error: ${response.status} ${response.statusText}`);
 		}
 
-		return await response.json();
+		const data = await response.json();
+		console.log('API response data:', data);
+		return data;
 	} catch (error) {
 		console.error(`API request failed: ${endpoint}`, error);
 		throw error;
