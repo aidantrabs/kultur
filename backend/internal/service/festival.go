@@ -51,6 +51,7 @@ func (s *FestivalService) GetBySlug(ctx context.Context, slug string) (db.Festiv
     if errors.Is(err, pgx.ErrNoRows) {
         return db.Festival{}, ErrFestivalNotFound
     }
+
     return festival, err
 }
 
@@ -59,6 +60,7 @@ func (s *FestivalService) GetByID(ctx context.Context, id pgtype.UUID) (db.Festi
     if errors.Is(err, pgx.ErrNoRows) {
         return db.Festival{}, ErrFestivalNotFound
     }
+
     return festival, err
 }
 
@@ -71,14 +73,13 @@ func (s *FestivalService) Update(ctx context.Context, params db.UpdateFestivalPa
     if errors.Is(err, pgx.ErrNoRows) {
         return db.Festival{}, ErrFestivalNotFound
     }
+
     return festival, err
 }
 
 func (s *FestivalService) Delete(ctx context.Context, id pgtype.UUID) error {
     return s.queries.DeleteFestival(ctx, id)
 }
-
-// festival date methods
 
 func (s *FestivalService) GetDates(ctx context.Context, festivalID pgtype.UUID) ([]db.FestivalDate, error) {
     return s.queries.GetFestivalDatesByFestivalID(ctx, festivalID)
@@ -92,6 +93,7 @@ func (s *FestivalService) GetDateByYear(ctx context.Context, festivalID pgtype.U
     if errors.Is(err, pgx.ErrNoRows) {
         return db.FestivalDate{}, ErrFestivalDateNotFound
     }
+
     return date, err
 }
 
@@ -104,6 +106,7 @@ func (s *FestivalService) UpdateDate(ctx context.Context, params db.UpdateFestiv
     if errors.Is(err, pgx.ErrNoRows) {
         return db.FestivalDate{}, ErrFestivalDateNotFound
     }
+
     return date, err
 }
 
