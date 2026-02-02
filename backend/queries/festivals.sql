@@ -1,24 +1,17 @@
 -- name: ListFestivals :many
 SELECT * FROM festivals
 WHERE is_published = true
-ORDER BY date_2026_start ASC NULLS LAST;
+ORDER BY name ASC;
 
 -- name: ListFestivalsByRegion :many
 SELECT * FROM festivals
 WHERE is_published = true AND region = $1
-ORDER BY date_2026_start ASC NULLS LAST;
+ORDER BY name ASC;
 
 -- name: ListFestivalsByHeritage :many
 SELECT * FROM festivals
 WHERE is_published = true AND heritage_type = $1
-ORDER BY date_2026_start ASC NULLS LAST;
-
--- name: ListUpcomingFestivals :many
-SELECT * FROM festivals
-WHERE is_published = true
-  AND date_2026_start >= CURRENT_DATE
-  AND date_2026_start <= CURRENT_DATE + INTERVAL '30 days'
-ORDER BY date_2026_start ASC;
+ORDER BY name ASC;
 
 -- name: GetFestivalBySlug :one
 SELECT * FROM festivals
@@ -30,10 +23,33 @@ WHERE id = $1;
 
 -- name: CreateFestival :one
 INSERT INTO festivals (
-    slug, name, date_type, usual_month, date_2026_start, date_2026_end,
-    region, heritage_type, festival_type, summary, story, what_to_expect,
-    how_to_participate, practical_info, cover_image_url, gallery_images,
-    video_embeds, is_published
+    slug, name, date_type, region, heritage_type, festival_type,
+    summary, story, what_to_expect, how_to_participate, practical_info,
+    cover_image_url, gallery_images, video_embeds, is_published
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15
 ) RETURNING *;
+
+-- name: UpdateFestival :one
+UPDATE festivals SET
+    slug = $2,
+    name = $3,
+    date_type = $4,
+    region = $5,
+    heritage_type = $6,
+    festival_type = $7,
+    summary = $8,
+    story = $9,
+    what_to_expect = $10,
+    how_to_participate = $11,
+    practical_info = $12,
+    cover_image_url = $13,
+    gallery_images = $14,
+    video_embeds = $15,
+    is_published = $16
+WHERE id = $1
+RETURNING *;
+
+-- name: DeleteFestival :exec
+DELETE FROM festivals
+WHERE id = $1;
