@@ -1,6 +1,7 @@
 import { config } from '$lib/config';
 import { festivalsApi, memoriesApi } from '$lib/api';
 import type { Memory } from '$lib/types/festival';
+// import memoriesData from
 
 // Mock memories data for development
 const mockMemories: Memory[] = [
@@ -146,7 +147,7 @@ export async function getMemoriesByFestivalSlug(slug: string): Promise<Memory[]>
   if (!festival) return [];
   
   return mockMemories.filter(
-    (m) => m.festivalId === festival.id && m.status === 'approved'
+    (m) => m.festivalId === slug && m.status === 'approved'
   );
 }
 

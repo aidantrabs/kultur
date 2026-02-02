@@ -3,6 +3,7 @@ import { getMemoriesByFestivalSlug } from '$lib/data/memories';
 import { config } from '$lib/config';
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
+import memoriesData from '$lib/data/memories.json';
 
 export const load: PageLoad = async ({ params }) => {
 	// Try API first if enabled, otherwise use mock data
@@ -27,6 +28,9 @@ export const load: PageLoad = async ({ params }) => {
 
 	// Get memories for this festival (API-aware)
 	const memories = await getMemoriesByFestivalSlug(params.slug);
+
+	console.log('Loaded memories for festival:', memories);
+	console.log(params.slug)
 
 	// Get related festivals (same heritage type, excluding current)
 	const relatedFestivals = festivals
