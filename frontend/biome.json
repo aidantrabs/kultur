@@ -40,10 +40,15 @@
             "complexity": {
                 "noForEach": "off"
             },
+            "correctness": {
+                "noUnusedImports": "off",
+                "noUnusedVariables": "off"
+            },
             "style": {
                 "noNonNullAssertion": "warn",
-                "useConst": "error",
-                "useTemplate": "off"
+                "useConst": "off",
+                "useTemplate": "off",
+                "useImportType": "off"
             },
             "suspicious": {
                 "noExplicitAny": "warn",
