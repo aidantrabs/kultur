@@ -1,7 +1,9 @@
+import { config } from '$lib/config';
+import { festivalsApi } from '$lib/api';
 import type { Festival } from '$lib/types/festival';
 
 // Mock data matching backend schema - 10 festivals from PLANNING.md
-export const festivals: Festival[] = [
+const mockFestivals: Festival[] = [
   {
     id: '550e8400-e29b-41d4-a716-446655440001',
     slug: 'hosay',
@@ -368,9 +370,45 @@ Today's Carnival features massive costume bands, soca music, J'ouvert (the pre-d
   },
 ];
 
+/**
+ * Get all festivals - uses API or mock data based on config
+ */
+export async function getAllFestivals(): Promise<Festival[]> {
+  if (config.useApi) {
+    try {
+      return await festivalsApi.list();
+    } catch (error) {
+      console.error('Failed to fetch festivals from API, falling back to mock data', error);
+      return mockFestivals;
+    }
+  }
+  return mockFestivals;
+}
+
+/**
+ * Get festival by slug - uses API or mock data based on config
+ */
+export async function getFestivalBySlug(slug: string): Promise<Festival | undefined> {
+  if (config.useApi) {
+    try {
+      return await festivalsApi.get(slug);
+    } catch (error) {
+      console.error(`Failed to fetch festival ${slug} from API, falling back to mock data`, error);
+      return mockFestivals.find((f) => f.slug === slug);
+    }
+  }
+  return mockFestivals.find((f) => f.slug === slug);
+}
+
+/**
+ * Synchronous access to festivals (mock data only)
+ * Use this for components that need immediate access
+ */
+export const festivals = mockFestivals;
+
 // Helper function to get festivals for a specific month (0-indexed)
 export function getFestivalsByMonth(month: number): Festival[] {
-  return festivals.filter((f) => {
+  return mockFestivals.filter((f) => {
     if (!f.date2026Start) return false;
     const startMonth = new Date(f.date2026Start).getMonth();
     const endMonth = f.date2026End ? new Date(f.date2026End).getMonth() : startMonth;
@@ -384,7 +422,7 @@ export function getUpcomingFestivals(days: number = 30): Festival[] {
   const futureDate = new Date(today);
   futureDate.setDate(today.getDate() + days);
 
-  return festivals
+  return mockFestivals
     .filter((f) => {
       if (!f.date2026Start) return false;
       const startDate = new Date(f.date2026Start);
@@ -397,13 +435,28 @@ export function getUpcomingFestivals(days: number = 30): Festival[] {
     });
 }
 
+/**
+ * Get upcoming festivals from API
+ */
+export async function getUpcomingFestivalsApi(): Promise<Festival[]> {
+  if (config.useApi) {
+    try {
+      return await festivalsApi.listUpcoming();
+    } catch (error) {
+      console.error('Failed to fetch upcoming festivals from API, falling back to mock', error);
+      return getUpcomingFestivals();
+    }
+  }
+  return getUpcomingFestivals();
+}
+
 // For demo purposes - get "This Week" festivals relative to a base date
 // Using February 2026 as base to show Carnival in "This Week"
 export function getThisWeekFestivals(baseDate: Date = new Date()): Festival[] {
   const weekEnd = new Date(baseDate);
   weekEnd.setDate(baseDate.getDate() + 14); // Show next 2 weeks
 
-  return festivals
+  return mockFestivals
     .filter((f) => {
       if (!f.date2026Start) return false;
       const startDate = new Date(f.date2026Start);

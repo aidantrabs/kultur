@@ -1,10 +1,23 @@
-import { festivals } from '$lib/data/festivals';
-import { getMemoriesByFestival } from '$lib/data/memories';
+import { festivals, getFestivalBySlug } from '$lib/data/festivals';
+import { getMemoriesByFestivalSlug } from '$lib/data/memories';
+import { config } from '$lib/config';
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = ({ params }) => {
-	const festival = festivals.find((f) => f.slug === params.slug);
+export const load: PageLoad = async ({ params }) => {
+	// Try API first if enabled, otherwise use mock data
+	let festival;
+	
+	if (config.useApi) {
+		try {
+			festival = await getFestivalBySlug(params.slug);
+		} catch (err) {
+			// Fallback to mock data
+			festival = festivals.find((f) => f.slug === params.slug);
+		}
+	} else {
+		festival = festivals.find((f) => f.slug === params.slug);
+	}
 
 	if (!festival) {
 		error(404, {
@@ -12,8 +25,8 @@ export const load: PageLoad = ({ params }) => {
 		});
 	}
 
-	// Get memories for this festival
-	const memories = getMemoriesByFestival(festival.id);
+	// Get memories for this festival (API-aware)
+	const memories = await getMemoriesByFestivalSlug(params.slug);
 
 	// Get related festivals (same heritage type, excluding current)
 	const relatedFestivals = festivals

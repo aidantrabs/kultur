@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { submitMemory } from '$lib/data/memories';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
 
@@ -64,9 +65,8 @@
 				yearOfMemory,
 			};
 
-			// For now, just simulate API call
-			// In production: await fetch('/api/memories', { method: 'POST', body: JSON.stringify(submission) })
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			// Submit using API-aware function (handles both mock and real API)
+			await submitMemory(submission);
 
 			// Call optional callback
 			onSubmit?.(submission);
@@ -81,6 +81,7 @@
 			yearOfMemory = '';
 		} catch (err) {
 			error = 'Something went wrong. Please try again.';
+			console.error('Memory submission error:', err);
 		} finally {
 			isSubmitting = false;
 		}

@@ -1,9 +1,9 @@
+import { config } from '$lib/config';
+import { festivalsApi, memoriesApi } from '$lib/api';
 import type { Memory } from '$lib/types/festival';
 
 // Mock memories data for development
-// In production, these come from GET /api/festivals/:slug/memories
-
-export const memories: Memory[] = [
+const mockMemories: Memory[] = [
   // Carnival memories
   {
     id: 'mem-1',
@@ -121,16 +121,79 @@ export const memories: Memory[] = [
   },
 ];
 
-// Get memories for a specific festival
+/**
+ * Get memories for a specific festival - uses API or mock data based on config
+ */
+export async function getMemoriesByFestivalSlug(slug: string): Promise<Memory[]> {
+  if (config.useApi) {
+    try {
+      return await festivalsApi.getMemories(slug);
+    } catch (error) {
+      console.error(`Failed to fetch memories for ${slug} from API, falling back to mock data`, error);
+      // For mock fallback, we need to find the festival ID by slug
+      const { festivals } = await import('./festivals');
+      const festival = festivals.find(f => f.slug === slug);
+      if (!festival) return [];
+      return mockMemories.filter(
+        (m) => m.festivalId === festival.id && m.status === 'approved'
+      );
+    }
+  }
+  
+  // Mock data mode - find festival by slug
+  const { festivals } = await import('./festivals');
+  const festival = festivals.find(f => f.slug === slug);
+  if (!festival) return [];
+  
+  return mockMemories.filter(
+    (m) => m.festivalId === festival.id && m.status === 'approved'
+  );
+}
+
+/**
+ * Submit a new memory - uses API or simulates submission based on config
+ */
+export async function submitMemory(memory: {
+  festivalId: string;
+  authorName: string;
+  authorEmail: string;
+  content: string;
+  yearOfMemory: string;
+}): Promise<Memory> {
+  if (config.useApi) {
+    return await memoriesApi.create(memory);
+  }
+  
+  // Simulate API call for mock mode
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  
+  return {
+    id: `mem-${Date.now()}`,
+    festivalId: memory.festivalId,
+    authorName: memory.authorName || null,
+    authorEmail: memory.authorEmail || null,
+    content: memory.content,
+    yearOfMemory: memory.yearOfMemory || null,
+    status: 'pending',
+    submittedAt: new Date().toISOString(),
+  };
+}
+
+/**
+ * Synchronous access to memories (mock data only)
+ */
+export const memories = mockMemories;
+
+// Get memories for a specific festival (synchronous, mock only)
 export function getMemoriesByFestival(festivalId: string): Memory[] {
-  return memories.filter(
+  return mockMemories.filter(
     (m) => m.festivalId === festivalId && m.status === 'approved'
   );
 }
 
-// Get recent memories across all festivals
+// Get recent memories across all festivals (synchronous, mock only)
 export function getRecentMemories(limit: number = 5): Memory[] {
-  return [...memories]
+  return [...mockMemories]
     .filter((m) => m.status === 'approved')
     .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime())
     .slice(0, limit);
