@@ -56,7 +56,6 @@ func (s *SubscriptionService) Create(ctx context.Context, params CreateSubscript
         return db.Subscription{}, err
     }
 
-    // send confirmation email (non-blocking, log errors)
     if err := s.email.SendConfirmation(params.Email, confirmToken); err != nil {
         // log error but don't fail the request
     }
@@ -77,7 +76,6 @@ func (s *SubscriptionService) Confirm(ctx context.Context, token string) error {
         return err
     }
 
-    // send welcome email
     if err := s.email.SendWelcome(sub.Email, sub.UnsubscribeToken); err != nil {
         // log error but don't fail the request
     }
