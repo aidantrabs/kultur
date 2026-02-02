@@ -4,7 +4,7 @@ import (
     "errors"
     "net/http"
 
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/service"
+    "github.com/aidantrabs/kultur/backend/internal/service"
     "github.com/google/uuid"
     "github.com/jackc/pgx/v5/pgtype"
     "github.com/labstack/echo/v4"

@@ -1,9 +1,9 @@
 package handler
 
 import (
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/db"
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/email"
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/service"
+    "github.com/aidantrabs/kultur/backend/internal/db"
+    "github.com/aidantrabs/kultur/backend/internal/email"
+    "github.com/aidantrabs/kultur/backend/internal/service"
     "github.com/jackc/pgx/v5/pgxpool"
 )
 

@@ -6,8 +6,8 @@ import (
     "encoding/hex"
     "errors"
 
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/db"
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/email"
+    "github.com/aidantrabs/kultur/backend/internal/db"
+    "github.com/aidantrabs/kultur/backend/internal/email"
     "github.com/jackc/pgx/v5"
     "github.com/jackc/pgx/v5/pgtype"
 )

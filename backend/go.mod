@@ -1,4 +1,4 @@
-module github.com/aidantrabs/trinbago-hackathon/backend
+module github.com/aidantrabs/kultur/backend
 
 go 1.24.0
 

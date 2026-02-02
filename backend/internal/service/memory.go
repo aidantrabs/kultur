@@ -4,7 +4,7 @@ import (
     "context"
     "errors"
 
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/db"
+    "github.com/aidantrabs/kultur/backend/internal/db"
     "github.com/jackc/pgx/v5"
     "github.com/jackc/pgx/v5/pgtype"
 )

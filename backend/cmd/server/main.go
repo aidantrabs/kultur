@@ -7,10 +7,10 @@ import (
     "strings"
     "time"
 
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/config"
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/db"
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/handler"
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/middleware"
+    "github.com/aidantrabs/kultur/backend/internal/config"
+    "github.com/aidantrabs/kultur/backend/internal/db"
+    "github.com/aidantrabs/kultur/backend/internal/handler"
+    "github.com/aidantrabs/kultur/backend/internal/middleware"
     "github.com/labstack/echo/v4"
     echomw "github.com/labstack/echo/v4/middleware"
 )
