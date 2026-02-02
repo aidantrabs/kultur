@@ -1,4 +1,4 @@
-# [App Name]
+# KULTUR
 
 **A first-timer's guide to Trinidad & Tobago's cultural festivals.**
 
@@ -136,7 +136,7 @@ Our demo showcases **10 festivals** across multiple heritage types:
 
 > *"Imagine every festival documented like this. Imagine diaspora kids learning about Hosay before visiting home. Imagine tourists experiencing something real.*
 >
-> *Your guide to Trinidad's cultural festivals."*
+> *KULTUR. Your guide to Trinidad's cultural festivals."*
 
 ---
 
