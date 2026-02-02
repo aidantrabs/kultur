@@ -12,6 +12,7 @@ type Handler struct {
     festivals     *service.FestivalService
     memories      *service.MemoryService
     subscriptions *service.SubscriptionService
+    email         *email.Service
 }
 
 type Config struct {
@@ -35,5 +36,6 @@ func New(pool *pgxpool.Pool, cfg Config) *Handler {
         festivals:     festivalSvc,
         memories:      service.NewMemoryService(queries, festivalSvc),
         subscriptions: service.NewSubscriptionService(queries, emailSvc),
+        email:         emailSvc,
     }
 }
