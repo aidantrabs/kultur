@@ -14,6 +14,7 @@ Technical deep-dive into the KULTUR platform architecture, decisions, and lesson
 - [Email System](#email-system)
 - [Deployment](#deployment)
 - [Issues & Solutions](#issues--solutions)
+- [CI/CD Pipeline](#cicd-pipeline)
 - [Security](#security)
 - [Performance](#performance)
 
@@ -80,7 +81,7 @@ Technical deep-dive into the KULTUR platform architecture, decisions, and lesson
 | TailwindCSS | 4.1 | Utility-first CSS |
 | shadcn-svelte | 1.1 | UI component library |
 | bits-ui | 2.15 | Headless UI primitives |
-| Biome | 1.9 | Linting and formatting |
+| Biome | 2.3 | Linting and formatting |
 | TypeScript | 5.9 | Type safety |
 | Vite | 7.3 | Build tool and dev server |
 
@@ -476,6 +477,62 @@ echo -n "https://kultur-api.fly.dev" | vercel env add PUBLIC_API_URL production
 **Cause:** Resend test domains (`onboarding@resend.dev`) can only send to verified account email.
 
 **Solution:** Set up custom domain `kultur-tt.app` with proper DNS (DKIM, SPF, MX records).
+
+---
+
+## CI/CD Pipeline
+
+GitHub Actions automates testing, formatting checks, and deployment.
+
+### Workflows
+
+| Workflow | Trigger | Purpose |
+|:---------|:--------|:--------|
+| `ci.yml` | Push/PR to main | Lint, type check, build, test |
+| `format-check.yml` | PR to main | Verify code formatting |
+| `deploy-backend.yml` | Push to main (backend changes) | Deploy to Fly.io |
+
+### CI Workflow (`ci.yml`)
+
+Runs on every push and pull request to `main`:
+
+**Frontend:**
+1. Install dependencies (`npm ci`)
+2. Lint (`npm run lint`)
+3. Type check (`npm run check`)
+4. Build (`npm run build`)
+
+**Backend:**
+1. Download Go dependencies
+2. Verify dependencies (`go mod verify`)
+3. Build (`go build -v ./...`)
+4. Test (`go test -v ./...`)
+
+### Format Check (`format-check.yml`)
+
+Runs on pull requests to ensure code style consistency:
+
+- **Frontend:** Biome format check (`npx @biomejs/biome format --check .`)
+- **Backend:** Go format check (`gofmt -l .`)
+
+### Deploy Backend (`deploy-backend.yml`)
+
+Automatically deploys to Fly.io when:
+- Changes are pushed to `backend/**`
+- Workflow is manually dispatched
+
+```yaml
+- name: Deploy
+  run: flyctl deploy --remote-only
+  env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+```
+
+### Required Secrets
+
+| Secret | Purpose |
+|:-------|:--------|
+| `FLY_API_TOKEN` | Fly.io deployment authentication |
 
 ---
 

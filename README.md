@@ -202,6 +202,7 @@ Our demo showcases **10 festivals** across multiple heritage types:
 | Backend | Go 1.24, Echo | Fly.io |
 | Database | PostgreSQL | Neon |
 | Email | Resend | Custom domain |
+| CI/CD | GitHub Actions | Automated testing & deployment |
 
 For technical deep-dive, see [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md).
 
