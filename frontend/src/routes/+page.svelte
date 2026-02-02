@@ -1,22 +1,22 @@
 <script lang="ts">
-import { Button } from '$lib/components/ui/button';
-import { FestivalCard } from '$lib/components/calendar';
-import { NewsletterSignup } from '$lib/components/newsletter';
-import { festivals, getThisWeekFestivals } from '$lib/data/festivals';
-import { heritageLabels } from '$lib/types/festival';
+    import { Button } from '$lib/components/ui/button';
+    import { FestivalCard } from '$lib/components/calendar';
+    import { NewsletterSignup } from '$lib/components/newsletter';
+    import { festivals, getThisWeekFestivals } from '$lib/data/festivals';
+    import { heritageLabels } from '$lib/types/festival';
 
-// Featured festivals for hero section
-const featuredFestivals = festivals.slice(0, 3);
+    // Featured festivals for hero section
+    const featuredFestivals = festivals.slice(0, 3);
 
-// "This Week" using demo date
-const thisWeekFestivals = getThisWeekFestivals(new Date('2026-02-10'));
+    // "This Week" using demo date
+    const thisWeekFestivals = getThisWeekFestivals(new Date('2026-02-10'));
 
-// Stats for impact section
-const stats = {
-    festivals: festivals.length,
-    heritageTypes: new Set(festivals.map((f) => f.heritageType)).size,
-    regions: new Set(festivals.map((f) => f.region)).size,
-};
+    // Stats for impact section
+    const stats = {
+        festivals: festivals.length,
+        heritageTypes: new Set(festivals.map((f) => f.heritageType)).size,
+        regions: new Set(festivals.map((f) => f.region)).size,
+    };
 </script>
 
 <svelte:head>

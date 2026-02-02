@@ -1,34 +1,34 @@
 <script lang="ts">
-import * as Card from '$lib/components/ui/card';
-import { Badge } from '$lib/components/ui/badge';
-import { ScrollArea } from '$lib/components/ui/scroll-area';
-import { Separator } from '$lib/components/ui/separator';
-import type { Festival, HeritageType } from '$lib/types/festival';
-import { heritageLabels, regionLabels } from '$lib/types/festival';
-import { formatDateRange, getRelativeTime } from '$lib/utils/calendar';
+    import * as Card from '$lib/components/ui/card';
+    import { Badge } from '$lib/components/ui/badge';
+    import { ScrollArea } from '$lib/components/ui/scroll-area';
+    import { Separator } from '$lib/components/ui/separator';
+    import type { Festival, HeritageType } from '$lib/types/festival';
+    import { heritageLabels, regionLabels } from '$lib/types/festival';
+    import { formatDateRange, getRelativeTime } from '$lib/utils/calendar';
 
-interface Props {
-    festivals: Festival[];
-    title?: string;
-    emptyMessage?: string;
-}
+    interface Props {
+        festivals: Festival[];
+        title?: string;
+        emptyMessage?: string;
+    }
 
-const {
-    festivals,
-    title = 'Festivals',
-    emptyMessage = 'No festivals match your filters',
-}: Props = $props();
+    const {
+        festivals,
+        title = 'Festivals',
+        emptyMessage = 'No festivals match your filters',
+    }: Props = $props();
 
-function getHeritageBadgeClass(heritage: HeritageType): string {
-    const classes: Record<HeritageType, string> = {
-        african: 'bg-heritage-african text-white hover:bg-heritage-african/80',
-        indian: 'bg-heritage-indian text-black hover:bg-heritage-indian/80',
-        indigenous: 'bg-heritage-indigenous text-white hover:bg-heritage-indigenous/80',
-        mixed: 'bg-heritage-mixed text-white hover:bg-heritage-mixed/80',
-        christian: 'bg-heritage-christian text-white hover:bg-heritage-christian/80',
-    };
-    return classes[heritage];
-}
+    function getHeritageBadgeClass(heritage: HeritageType): string {
+        const classes: Record<HeritageType, string> = {
+            african: 'bg-heritage-african text-white hover:bg-heritage-african/80',
+            indian: 'bg-heritage-indian text-black hover:bg-heritage-indian/80',
+            indigenous: 'bg-heritage-indigenous text-white hover:bg-heritage-indigenous/80',
+            mixed: 'bg-heritage-mixed text-white hover:bg-heritage-mixed/80',
+            christian: 'bg-heritage-christian text-white hover:bg-heritage-christian/80',
+        };
+        return classes[heritage];
+    }
 </script>
 
 <div class="flex flex-col h-full overflow-hidden">

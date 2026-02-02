@@ -1,66 +1,69 @@
 <script lang="ts">
-import { Button } from '$lib/components/ui/button';
-import { config } from '$lib/config';
-import { subscriptionsApi } from '$lib/api';
+    import { Button } from '$lib/components/ui/button';
+    import { config } from '$lib/config';
+    import { subscriptionsApi } from '$lib/api';
 
-interface Props {
-    variant?: 'default' | 'compact' | 'hero';
-}
-
-const { variant = 'default' }: Props = $props();
-
-let email = $state('');
-
-let isSubmitting = $state(false);
-let showSuccess = $state(false);
-let error = $state<string | null>(null);
-
-async function handleSubmit(e: Event) {
-    e.preventDefault();
-    console.log('handleSubmit called!', { email });
-    error = null;
-
-    if (!email.trim()) {
-        error = 'Please enter your email address.';
-        console.log('Validation failed: empty email');
-        return;
+    interface Props {
+        variant?: 'default' | 'compact' | 'hero';
     }
 
-    if (!email.includes('@') || !email.includes('.')) {
-        error = 'Please enter a valid email address.';
-        console.log('Validation failed: invalid email');
-        return;
-    }
+    const { variant = 'default' }: Props = $props();
 
-    console.log('Validation passed, submitting...');
-    isSubmitting = true;
+    let email = $state('');
 
-    try {
-        console.log('Subscribing with config:', { useApi: config.useApi, apiUrl: config.apiUrl });
+    let isSubmitting = $state(false);
+    let showSuccess = $state(false);
+    let error = $state<string | null>(null);
 
-        if (config.useApi) {
-            const result = await subscriptionsApi.subscribe({
-                email: email.trim(),
-            });
-            console.log('Subscription result:', result);
-        } else {
-            console.log('Using mock mode');
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+    async function handleSubmit(e: Event) {
+        e.preventDefault();
+        console.log('handleSubmit called!', { email });
+        error = null;
+
+        if (!email.trim()) {
+            error = 'Please enter your email address.';
+            console.log('Validation failed: empty email');
+            return;
         }
 
-        showSuccess = true;
-        email = '';
+        if (!email.includes('@') || !email.includes('.')) {
+            error = 'Please enter a valid email address.';
+            console.log('Validation failed: invalid email');
+            return;
+        }
 
-        setTimeout(() => {
-            showSuccess = false;
-        }, 3000);
-    } catch (err: unknown) {
-        console.error('Subscription error:', err);
-        error = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
-    } finally {
-        isSubmitting = false;
+        console.log('Validation passed, submitting...');
+        isSubmitting = true;
+
+        try {
+            console.log('Subscribing with config:', {
+                useApi: config.useApi,
+                apiUrl: config.apiUrl,
+            });
+
+            if (config.useApi) {
+                const result = await subscriptionsApi.subscribe({
+                    email: email.trim(),
+                });
+                console.log('Subscription result:', result);
+            } else {
+                console.log('Using mock mode');
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+            }
+
+            showSuccess = true;
+            email = '';
+
+            setTimeout(() => {
+                showSuccess = false;
+            }, 3000);
+        } catch (err: unknown) {
+            console.error('Subscription error:', err);
+            error = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+        } finally {
+            isSubmitting = false;
+        }
     }
-}
 </script>
 
 {#if variant === 'hero'}

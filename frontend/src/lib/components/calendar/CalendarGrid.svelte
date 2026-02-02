@@ -1,52 +1,52 @@
 <script lang="ts">
-import { Badge } from '$lib/components/ui/badge';
-import type { Festival, HeritageType } from '$lib/types/festival';
-import { heritageLabels } from '$lib/types/festival';
-import { getCalendarDays, DAY_NAMES, isDateInRange } from '$lib/utils/calendar';
+    import { Badge } from '$lib/components/ui/badge';
+    import type { Festival, HeritageType } from '$lib/types/festival';
+    import { heritageLabels } from '$lib/types/festival';
+    import { getCalendarDays, DAY_NAMES, isDateInRange } from '$lib/utils/calendar';
 
-interface Props {
-    year: number;
-    month: number;
-    festivals: Festival[];
-    filteredFestivalIds: Set<string>;
-    hasActiveFilters: boolean;
-    onDayClick?: (date: Date, festivals: Festival[]) => void;
-}
-
-const { year, month, festivals, filteredFestivalIds, hasActiveFilters, onDayClick }: Props =
-    $props();
-
-const days = $derived(getCalendarDays(year, month));
-
-// Get festivals for a specific day
-function getFestivalsForDay(date: Date): Festival[] {
-    return festivals.filter((f) => isDateInRange(date, f.date2026Start, f.date2026End));
-}
-
-// Check if a festival matches current filters
-function isHighlighted(festival: Festival): boolean {
-    if (!hasActiveFilters) return true;
-    return filteredFestivalIds.has(festival.id);
-}
-
-// Get heritage color class
-function getHeritageColorClass(heritage: HeritageType): string {
-    const colors: Record<HeritageType, string> = {
-        african: 'bg-heritage-african',
-        indian: 'bg-heritage-indian',
-        indigenous: 'bg-heritage-indigenous',
-        mixed: 'bg-heritage-mixed',
-        christian: 'bg-heritage-christian',
-    };
-    return colors[heritage];
-}
-
-function handleDayClick(date: Date) {
-    const dayFestivals = getFestivalsForDay(date);
-    if (dayFestivals.length > 0 && onDayClick) {
-        onDayClick(date, dayFestivals);
+    interface Props {
+        year: number;
+        month: number;
+        festivals: Festival[];
+        filteredFestivalIds: Set<string>;
+        hasActiveFilters: boolean;
+        onDayClick?: (date: Date, festivals: Festival[]) => void;
     }
-}
+
+    const { year, month, festivals, filteredFestivalIds, hasActiveFilters, onDayClick }: Props =
+        $props();
+
+    const days = $derived(getCalendarDays(year, month));
+
+    // Get festivals for a specific day
+    function getFestivalsForDay(date: Date): Festival[] {
+        return festivals.filter((f) => isDateInRange(date, f.date2026Start, f.date2026End));
+    }
+
+    // Check if a festival matches current filters
+    function isHighlighted(festival: Festival): boolean {
+        if (!hasActiveFilters) return true;
+        return filteredFestivalIds.has(festival.id);
+    }
+
+    // Get heritage color class
+    function getHeritageColorClass(heritage: HeritageType): string {
+        const colors: Record<HeritageType, string> = {
+            african: 'bg-heritage-african',
+            indian: 'bg-heritage-indian',
+            indigenous: 'bg-heritage-indigenous',
+            mixed: 'bg-heritage-mixed',
+            christian: 'bg-heritage-christian',
+        };
+        return colors[heritage];
+    }
+
+    function handleDayClick(date: Date) {
+        const dayFestivals = getFestivalsForDay(date);
+        if (dayFestivals.length > 0 && onDayClick) {
+            onDayClick(date, dayFestivals);
+        }
+    }
 </script>
 
 <div class="w-full">

@@ -1,25 +1,25 @@
 <script lang="ts">
-import * as Card from '$lib/components/ui/card';
-import type { Memory } from '$lib/types/festival';
+    import * as Card from '$lib/components/ui/card';
+    import type { Memory } from '$lib/types/festival';
 
-const { memory }: { memory: Memory } = $props();
+    const { memory }: { memory: Memory } = $props();
 
-function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('en-TT', {
-        month: 'short',
-        year: 'numeric',
-    });
-}
+    function formatDate(dateString: string): string {
+        return new Date(dateString).toLocaleDateString('en-TT', {
+            month: 'short',
+            year: 'numeric',
+        });
+    }
 
-function getInitials(name: string | null): string {
-    if (!name || name === 'Anonymous') return '?';
-    return name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2);
-}
+    function getInitials(name: string | null): string {
+        if (!name || name === 'Anonymous') return '?';
+        return name
+            .split(' ')
+            .map((n) => n[0])
+            .join('')
+            .toUpperCase()
+            .slice(0, 2);
+    }
 </script>
 
 <Card.Root class="h-full">

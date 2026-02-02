@@ -1,23 +1,23 @@
 <script lang="ts">
-import type { Select as SelectPrimitive } from 'bits-ui';
-import type SelectPortal from './select-portal.svelte';
-import SelectScrollUpButton from './select-scroll-up-button.svelte';
-import SelectScrollDownButton from './select-scroll-down-button.svelte';
-import { cn, type WithoutChild } from '$lib/utils.js';
-import type { ComponentProps } from 'svelte';
-import type { WithoutChildrenOrChild } from '$lib/utils.js';
+    import type { Select as SelectPrimitive } from 'bits-ui';
+    import type SelectPortal from './select-portal.svelte';
+    import SelectScrollUpButton from './select-scroll-up-button.svelte';
+    import SelectScrollDownButton from './select-scroll-down-button.svelte';
+    import { cn, type WithoutChild } from '$lib/utils.js';
+    import type { ComponentProps } from 'svelte';
+    import type { WithoutChildrenOrChild } from '$lib/utils.js';
 
-const {
-    ref = $bindable(null),
-    class: className,
-    sideOffset = 4,
-    portalProps,
-    children,
-    preventScroll = true,
-    ...restProps
-}: WithoutChild<SelectPrimitive.ContentProps> & {
-    portalProps?: WithoutChildrenOrChild<ComponentProps<typeof SelectPortal>>;
-} = $props();
+    const {
+        ref = $bindable(null),
+        class: className,
+        sideOffset = 4,
+        portalProps,
+        children,
+        preventScroll = true,
+        ...restProps
+    }: WithoutChild<SelectPrimitive.ContentProps> & {
+        portalProps?: WithoutChildrenOrChild<ComponentProps<typeof SelectPortal>>;
+    } = $props();
 </script>
 
 <SelectPortal {...portalProps}>

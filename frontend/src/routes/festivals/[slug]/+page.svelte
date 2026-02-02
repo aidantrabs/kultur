@@ -1,56 +1,56 @@
 <script lang="ts">
-import { marked } from 'marked';
-import { Badge } from '$lib/components/ui/badge';
-import { Button } from '$lib/components/ui/button';
-import * as Card from '$lib/components/ui/card';
-import { Separator } from '$lib/components/ui/separator';
-import { FestivalCard } from '$lib/components/calendar';
-import { MemoryCard, MemoryForm } from '$lib/components/memories';
-import { NewsletterSignup } from '$lib/components/newsletter';
-import { heritageLabels, regionLabels } from '$lib/types/festival';
-import type { HeritageType } from '$lib/types/festival';
-import { formatDateRange, getRelativeTime } from '$lib/utils/calendar';
+    import { marked } from 'marked';
+    import { Badge } from '$lib/components/ui/badge';
+    import { Button } from '$lib/components/ui/button';
+    import * as Card from '$lib/components/ui/card';
+    import { Separator } from '$lib/components/ui/separator';
+    import { FestivalCard } from '$lib/components/calendar';
+    import { MemoryCard, MemoryForm } from '$lib/components/memories';
+    import { NewsletterSignup } from '$lib/components/newsletter';
+    import { heritageLabels, regionLabels } from '$lib/types/festival';
+    import type { HeritageType } from '$lib/types/festival';
+    import { formatDateRange, getRelativeTime } from '$lib/utils/calendar';
 
-const { data } = $props();
-const festival = $derived(data.festival);
-const memories = $derived(data.memories);
-const relatedFestivals = $derived(data.relatedFestivals);
+    const { data } = $props();
+    const festival = $derived(data.festival);
+    const memories = $derived(data.memories);
+    const relatedFestivals = $derived(data.relatedFestivals);
 
-// Configure marked for safety
-marked.setOptions({
-    breaks: true,
-    gfm: true,
-});
+    // Configure marked for safety
+    marked.setOptions({
+        breaks: true,
+        gfm: true,
+    });
 
-let linkCopied = $state(false);
+    let linkCopied = $state(false);
 
-function getHeritageBadgeClass(heritage: HeritageType): string {
-    const classes: Record<HeritageType, string> = {
-        african: 'bg-heritage-african text-white',
-        indian: 'bg-heritage-indian text-black',
-        indigenous: 'bg-heritage-indigenous text-white',
-        mixed: 'bg-heritage-mixed text-white',
-        christian: 'bg-heritage-christian text-white',
-    };
-    return classes[heritage];
-}
-
-function renderMarkdown(content: string | null): string {
-    if (!content) return '';
-    return marked.parse(content) as string;
-}
-
-async function copyLink() {
-    try {
-        await navigator.clipboard.writeText(window.location.href);
-        linkCopied = true;
-        setTimeout(() => {
-            linkCopied = false;
-        }, 2000);
-    } catch (err) {
-        console.error('Failed to copy link:', err);
+    function getHeritageBadgeClass(heritage: HeritageType): string {
+        const classes: Record<HeritageType, string> = {
+            african: 'bg-heritage-african text-white',
+            indian: 'bg-heritage-indian text-black',
+            indigenous: 'bg-heritage-indigenous text-white',
+            mixed: 'bg-heritage-mixed text-white',
+            christian: 'bg-heritage-christian text-white',
+        };
+        return classes[heritage];
     }
-}
+
+    function renderMarkdown(content: string | null): string {
+        if (!content) return '';
+        return marked.parse(content) as string;
+    }
+
+    async function copyLink() {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            linkCopied = true;
+            setTimeout(() => {
+                linkCopied = false;
+            }, 2000);
+        } catch (err) {
+            console.error('Failed to copy link:', err);
+        }
+    }
 </script>
 
 <svelte:head>
