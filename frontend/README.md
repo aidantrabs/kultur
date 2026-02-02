@@ -1,42 +1,90 @@
-# sv
+# KULTUR Frontend
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+SvelteKit frontend for the KULTUR platform.
 
-## Creating a project
+## Tech Stack
 
-If you're seeing this, you've probably already done this step. Congrats!
+- **SvelteKit 2** - Full-stack framework
+- **Svelte 5** - Reactive UI with runes
+- **TailwindCSS 4** - Utility-first CSS
+- **shadcn-svelte** - UI components
+- **Biome** - Linting and formatting
 
-```sh
-# create a new project
-npx sv create my-app
+## Setup
+
+### Prerequisites
+
+- Node.js 20+
+
+### Install Dependencies
+
+```bash
+npm install
 ```
 
-To recreate this project with the same configuration:
+### Environment Variables
 
-```sh
-# recreate this project
-npx sv create --template minimal --types ts --add tailwindcss="plugins:none" sveltekit-adapter="adapter:auto" mcp="ide:vscode,claude-code+setup:local" --install npm ./frontend
+Create a `.env` file:
+
+```env
+PUBLIC_API_URL=http://localhost:8080
+PUBLIC_DATA_SOURCE=api
 ```
 
-## Developing
+| Variable | Description |
+|:---------|:------------|
+| `PUBLIC_API_URL` | Backend API URL |
+| `PUBLIC_DATA_SOURCE` | `api` for real data, `mock` for local mock data |
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Development
 
-```sh
+```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Opens at http://localhost:5173
 
-To create a production version of your app:
+## Scripts
 
-```sh
-npm run build
+| Command | Description |
+|:--------|:------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build |
+| `npm run preview` | Preview production build |
+| `npm run check` | TypeScript type checking |
+| `npm run format` | Format with Biome |
+| `npm run lint` | Lint with Biome |
+| `npm run deploy` | Deploy to Vercel |
+
+## Project Structure
+
+```
+src/
+├── lib/
+│   ├── api.ts              # API client
+│   ├── config.ts           # Environment config
+│   ├── components/
+│   │   ├── ui/             # shadcn-svelte components
+│   │   ├── calendar/       # Calendar components
+│   │   └── newsletter/     # Newsletter signup
+│   ├── data/
+│   │   ├── festivals.ts    # Festival data
+│   │   └── memories.ts     # Memory data
+│   └── types/
+│       └── festival.ts     # TypeScript types
+└── routes/
+    ├── +page.svelte        # Home page
+    └── festivals/
+        ├── +page.svelte    # Calendar view
+        └── [slug]/         # Festival detail
 ```
 
-You can preview the production build with `npm run preview`.
+## Deployment
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Deployed to Vercel at [kultur-tt.app](https://kultur-tt.app).
+
+```bash
+npm run deploy
+```
+
+Or push to `main` branch for automatic deployment.

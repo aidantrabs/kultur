@@ -1,0 +1,76 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.3.13/schema.json",
+    "vcs": {
+        "enabled": false,
+        "clientKind": "git",
+        "useIgnoreFile": false
+    },
+    "files": {
+        "ignoreUnknown": false,
+        "includes": [
+            "**/*.ts",
+            "**/*.svelte",
+            "**/*.json",
+            "!.svelte-kit",
+            "!node_modules",
+            "!build"
+        ]
+    },
+    "formatter": {
+        "formatWithErrors": false,
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 100,
+        "lineEnding": "lf",
+        "attributePosition": "auto",
+        "bracketSpacing": true
+    },
+    "assist": {
+        "actions": {
+            "source": {
+                "organizeImports": "on"
+            }
+        }
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": true,
+            "complexity": {
+                "noForEach": "off"
+            },
+            "correctness": {
+                "noUnusedImports": "off",
+                "noUnusedVariables": "off"
+            },
+            "style": {
+                "noNonNullAssertion": "warn",
+                "useConst": "off",
+                "useTemplate": "off",
+                "useImportType": "off"
+            },
+            "suspicious": {
+                "noExplicitAny": "warn",
+                "noConsole": "off"
+            }
+        }
+    },
+    "html": {
+        "formatter": {
+            "indentScriptAndStyle": true
+        }
+    },
+    "javascript": {
+        "formatter": {
+            "jsxQuoteStyle": "double",
+            "quoteProperties": "asNeeded",
+            "quoteStyle": "single",
+            "trailingCommas": "es5",
+            "semicolons": "always",
+            "arrowParentheses": "always",
+            "attributePosition": "auto",
+            "bracketSpacing": true
+        }
+    }
+}

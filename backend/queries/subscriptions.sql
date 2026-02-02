@@ -29,3 +29,7 @@ WHERE id = $1;
 -- name: ListConfirmedWeeklyDigest :many
 SELECT * FROM subscriptions
 WHERE confirmed = true AND digest_weekly = true;
+
+-- name: ListAllSubscriptions :many
+SELECT * FROM subscriptions
+ORDER BY created_at DESC;

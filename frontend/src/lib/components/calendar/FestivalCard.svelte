@@ -1,31 +1,31 @@
 <script lang="ts">
-	import * as Card from '$lib/components/ui/card';
-	import { Badge } from '$lib/components/ui/badge';
-	import type { Festival, HeritageType } from '$lib/types/festival';
-	import { heritageLabels, regionLabels } from '$lib/types/festival';
-	import { formatDateRange, getRelativeTime } from '$lib/utils/calendar';
+    import * as Card from '$lib/components/ui/card';
+    import { Badge } from '$lib/components/ui/badge';
+    import type { Festival, HeritageType } from '$lib/types/festival';
+    import { heritageLabels, regionLabels } from '$lib/types/festival';
+    import { formatDateRange, getRelativeTime } from '$lib/utils/calendar';
 
-	interface Props {
-		festival: Festival;
-		variant?: 'default' | 'compact';
-	}
+    interface Props {
+        festival: Festival;
+        variant?: 'default' | 'compact';
+    }
 
-	let { festival, variant = 'default' }: Props = $props();
+    const { festival, variant = 'default' }: Props = $props();
 
-	function getHeritageBadgeClass(heritage: HeritageType): string {
-		const classes: Record<HeritageType, string> = {
-			african: 'bg-heritage-african text-white hover:bg-heritage-african/80',
-			indian: 'bg-heritage-indian text-black hover:bg-heritage-indian/80',
-			indigenous: 'bg-heritage-indigenous text-white hover:bg-heritage-indigenous/80',
-			mixed: 'bg-heritage-mixed text-white hover:bg-heritage-mixed/80',
-			christian: 'bg-heritage-christian text-white hover:bg-heritage-christian/80',
-		};
-		return classes[heritage];
-	}
+    function getHeritageBadgeClass(heritage: HeritageType): string {
+        const classes: Record<HeritageType, string> = {
+            african: 'bg-heritage-african text-white hover:bg-heritage-african/80',
+            indian: 'bg-heritage-indian text-black hover:bg-heritage-indian/80',
+            indigenous: 'bg-heritage-indigenous text-white hover:bg-heritage-indigenous/80',
+            mixed: 'bg-heritage-mixed text-white hover:bg-heritage-mixed/80',
+            christian: 'bg-heritage-christian text-white hover:bg-heritage-christian/80',
+        };
+        return classes[heritage];
+    }
 </script>
 
-<a href="/festivals/{festival.slug}" class="block group">
-	<Card.Root class="overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-tt-red/50 hover:-translate-y-1">
+<a href="/festivals/{festival.slug}" class="block group h-full w-full">
+	<Card.Root class="h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-tt-red/50 hover:-translate-y-1">
 		{#if festival.coverImageUrl && variant === 'default'}
 			<div class="relative h-40 overflow-hidden">
 				<img
@@ -50,8 +50,8 @@
 		{/if}
 
 		<Card.Header class="{variant === 'compact' ? 'p-3' : 'p-4'} pb-2">
-			<div class="flex items-start justify-between gap-2">
-				<Card.Title class="{variant === 'compact' ? 'text-base' : 'text-lg'} font-semibold group-hover:text-tt-red transition-colors">
+			<div class="flex items-start justify-between gap-2 {variant === 'compact' ? 'min-h-[2.5rem]' : 'min-h-[3rem]'}">
+				<Card.Title class="{variant === 'compact' ? 'text-base' : 'text-lg'} font-semibold group-hover:text-tt-red transition-colors line-clamp-2">
 					{festival.name}
 				</Card.Title>
 				{#if variant === 'compact' || !festival.coverImageUrl}
@@ -62,12 +62,12 @@
 			</div>
 		</Card.Header>
 
-		<Card.Content class="{variant === 'compact' ? 'p-3' : 'p-4'} pt-0">
-			<p class="text-sm text-muted-foreground line-clamp-2 mb-3">
+		<Card.Content class="{variant === 'compact' ? 'p-3' : 'p-4'} pt-0 flex-grow flex flex-col">
+			<p class="text-sm text-muted-foreground line-clamp-2 mb-3 {variant === 'compact' ? 'min-h-[2.5rem]' : 'min-h-[2.75rem]'}">
 				{festival.summary}
 			</p>
-			
-			<div class="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+
+			<div class="flex flex-wrap items-center gap-3 text-xs text-muted-foreground mt-auto">
 				<span class="flex items-center gap-1">
 					<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 						<rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>

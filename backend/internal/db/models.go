@@ -12,43 +12,53 @@ type Festival struct {
 	ID               pgtype.UUID        `json:"id"`
 	Slug             string             `json:"slug"`
 	Name             string             `json:"name"`
-	DateType         string             `json:"date_type"`
-	UsualMonth       pgtype.Text        `json:"usual_month"`
-	Date2026Start    pgtype.Date        `json:"date_2026_start"`
-	Date2026End      pgtype.Date        `json:"date_2026_end"`
+	DateType         string             `json:"dateType"`
 	Region           string             `json:"region"`
-	HeritageType     string             `json:"heritage_type"`
-	FestivalType     string             `json:"festival_type"`
+	HeritageType     string             `json:"heritageType"`
+	FestivalType     string             `json:"festivalType"`
 	Summary          string             `json:"summary"`
 	Story            pgtype.Text        `json:"story"`
-	WhatToExpect     pgtype.Text        `json:"what_to_expect"`
-	HowToParticipate pgtype.Text        `json:"how_to_participate"`
-	PracticalInfo    pgtype.Text        `json:"practical_info"`
-	CoverImageUrl    pgtype.Text        `json:"cover_image_url"`
-	GalleryImages    []byte             `json:"gallery_images"`
-	VideoEmbeds      []byte             `json:"video_embeds"`
-	IsPublished      pgtype.Bool        `json:"is_published"`
-	CreatedAt        pgtype.Timestamptz `json:"created_at"`
+	WhatToExpect     pgtype.Text        `json:"whatToExpect"`
+	HowToParticipate pgtype.Text        `json:"howToParticipate"`
+	PracticalInfo    pgtype.Text        `json:"practicalInfo"`
+	CoverImageUrl    pgtype.Text        `json:"coverImageUrl"`
+	GalleryImages    []byte             `json:"galleryImages"`
+	VideoEmbeds      []byte             `json:"videoEmbeds"`
+	IsPublished      pgtype.Bool        `json:"isPublished"`
+	CreatedAt        pgtype.Timestamptz `json:"createdAt"`
+	UsualMonth       pgtype.Text        `json:"usualMonth"`
+	Date2026Start    pgtype.Date        `json:"date2026Start"`
+	Date2026End      pgtype.Date        `json:"date2026End"`
+}
+
+type FestivalDate struct {
+	ID          pgtype.UUID        `json:"id"`
+	FestivalID  pgtype.UUID        `json:"festivalId"`
+	Year        int32              `json:"year"`
+	StartDate   pgtype.Date        `json:"startDate"`
+	EndDate     pgtype.Date        `json:"endDate"`
+	IsTentative pgtype.Bool        `json:"isTentative"`
+	CreatedAt   pgtype.Timestamptz `json:"createdAt"`
 }
 
 type Memory struct {
 	ID           pgtype.UUID        `json:"id"`
-	FestivalID   pgtype.UUID        `json:"festival_id"`
-	AuthorName   pgtype.Text        `json:"author_name"`
-	AuthorEmail  pgtype.Text        `json:"author_email"`
+	FestivalID   pgtype.UUID        `json:"festivalId"`
+	AuthorName   pgtype.Text        `json:"authorName"`
+	AuthorEmail  pgtype.Text        `json:"authorEmail"`
 	Content      string             `json:"content"`
-	YearOfMemory pgtype.Text        `json:"year_of_memory"`
+	YearOfMemory pgtype.Text        `json:"yearOfMemory"`
 	Status       pgtype.Text        `json:"status"`
-	SubmittedAt  pgtype.Timestamptz `json:"submitted_at"`
+	SubmittedAt  pgtype.Timestamptz `json:"submittedAt"`
 }
 
 type Subscription struct {
 	ID                pgtype.UUID        `json:"id"`
 	Email             string             `json:"email"`
-	DigestWeekly      pgtype.Bool        `json:"digest_weekly"`
-	FestivalReminders []byte             `json:"festival_reminders"`
+	DigestWeekly      pgtype.Bool        `json:"digestWeekly"`
+	FestivalReminders []byte             `json:"festivalReminders"`
 	Confirmed         pgtype.Bool        `json:"confirmed"`
-	ConfirmationToken pgtype.Text        `json:"confirmation_token"`
-	UnsubscribeToken  string             `json:"unsubscribe_token"`
-	CreatedAt         pgtype.Timestamptz `json:"created_at"`
+	ConfirmationToken pgtype.Text        `json:"confirmationToken"`
+	UnsubscribeToken  string             `json:"unsubscribeToken"`
+	CreatedAt         pgtype.Timestamptz `json:"createdAt"`
 }

@@ -1,18 +1,36 @@
-# [App Name]
+<p align="center">
+  <img src="frontend/static/logo.png" alt="KULTUR" width="120" height="120">
+</p>
 
-**A first-timer's guide to Trinidad & Tobago's cultural festivals.**
+<h1 align="center">KULTUR</h1>
 
-*TrinbagoTech Hackathon 2026 · January 30 – February 2*
+<p align="center">
+  <strong>A first-timer's guide to Trinidad & Tobago's cultural festivals.</strong>
+</p>
+
+<p align="center">
+  <a href="https://kultur-tt.app">Live Site</a> •
+  <a href="#the-problem">The Problem</a> •
+  <a href="#features">Features</a> •
+  <a href="#documentation">Documentation</a>
+</p>
 
 ---
 
-## The Team
+## Table of Contents
 
-| Name | Role |
-|:-----|:-----|
-| **Aidan** | Backend Development |
-| **Tevin** | Frontend Development |
-| **Jahzara** | Content & Cultural Research |
+- [The Problem](#the-problem)
+- [The Gap in the Market](#the-gap-in-the-market)
+- [Our Solution](#our-solution)
+- [Features](#features)
+- [Use Cases](#use-cases)
+- [Why This Matters](#why-this-matters)
+- [The Opportunity](#the-opportunity)
+- [Demo Highlights](#demo-highlights)
+- [Technical Overview](#technical-overview)
+- [Documentation](#documentation)
+- [Quick Start](#quick-start)
+- [The Team](#the-team)
 
 ---
 
@@ -54,18 +72,62 @@ People don't just need to know *when* a festival happens. They need to know *wha
 
 A platform that serves as a **first-timer's guide** to every major cultural festival in Trinidad & Tobago.
 
-### What We're Building
+KULTUR bridges the gap between cultural knowledge holders and those seeking to learn. We provide the context, etiquette, and practical information that turns curious observers into respectful participants.
 
-- **Festival Calendar** — Browse all festivals by month, region, or heritage type
-- **First-Timer's Guides** — Deep, accessible content for each festival:
-  - History and cultural significance
-  - What you'll actually see, hear, and experience
-  - How to participate respectfully (dress code, etiquette, what's appropriate)
-  - Practical info (parking, food, best viewing spots)
-- **"This Week in T&T Culture"** — What's happening soon, with email digests
-- **Community Memories** — Real stories from people who've attended
-- **Email Reminders** — Get notified before festivals you care about
-- **PWA** — Works offline (for when you're at a festival with bad signal)
+---
+
+## Features
+
+### Festival Calendar
+- Browse all festivals by month, region, or heritage type
+- Interactive calendar with color-coded heritage types
+- "This Week in T&T" section for upcoming festivals
+
+### First-Timer's Guides
+Each festival includes:
+- **The Story** — History and cultural significance
+- **What to Expect** — Sights, sounds, and atmosphere
+- **How to Participate** — Dress code, etiquette, what's appropriate
+- **Practical Info** — Parking, food, best viewing spots
+
+### Newsletter & Reminders
+- Email subscription for festival updates
+- Festival reminder notifications
+- Weekly digest of upcoming festivals
+
+### Community Memories
+- Real stories from people who've attended
+- Submit your own festival memories
+- No account required — low friction
+
+---
+
+## Use Cases
+
+### The Local Who's Never Been
+*"I've lived in Trinidad my whole life but never attended Hosay. I didn't know what to wear or if I was even allowed to go."*
+
+KULTUR provides the confidence to attend for the first time, with clear guidance on etiquette and expectations.
+
+### The Diaspora Returning Home
+*"I grew up in New York but my grandparents always talked about Divali Nagar. I'm visiting in November and want to experience it properly."*
+
+KULTUR helps diaspora plan meaningful visits around cultural events, reconnecting with traditions their families left behind.
+
+### The Tourist Seeking Authenticity
+*"I've done the beaches. I want to experience the real Trinidad, not just the tourist version."*
+
+KULTUR opens doors to authentic cultural experiences beyond the typical tourist trail.
+
+### The Parent Teaching Their Children
+*"My kids are growing up in Canada. I want them to understand where they come from."*
+
+KULTUR documents traditions in an accessible way, helping parents share cultural heritage with the next generation.
+
+### The Researcher or Journalist
+*"I'm writing about Caribbean religious syncretism and need accurate information about Spiritual Baptist practices."*
+
+KULTUR provides well-researched, respectful documentation of cultural practices.
 
 ---
 
@@ -91,7 +153,7 @@ These traditions risk fading from public consciousness when they're not document
 
 ### Tourism with Authenticity
 
-**158,890 tourists** arrived in T&T between January and May 2025 (up 13.7% year-over-year). The Ministry of Tourism is actively pushing "community-centered experiences" — exactly what our platform enables.
+**158,890 tourists** arrived in T&T between January and May 2025 (up 13.7% year-over-year). The Ministry of Tourism is actively pushing "community-centered experiences" — exactly what KULTUR enables.
 
 Instead of just beaches and Carnival, tourists can experience:
 - Hosay processions in St. James
@@ -132,14 +194,86 @@ Our demo showcases **10 festivals** across multiple heritage types:
 
 ---
 
-## Vision
+## Technical Overview
 
-> *"Imagine every festival documented like this. Imagine diaspora kids learning about Hosay before visiting home. Imagine tourists experiencing something real.*
->
-> *Your guide to Trinidad's cultural festivals."*
+![SvelteKit](docs/assets/tech-icons/sveltekit.svg)
+![TypeScript](docs/assets/tech-icons/typescript.svg)
+![TailwindCSS](docs/assets/tech-icons/tailwindcss.svg)
+![Vite](docs/assets/tech-icons/vite.svg)
+![Vercel](docs/assets/tech-icons/vercel.svg)
+
+![Go](docs/assets/tech-icons/go.svg)
+![PostgreSQL](docs/assets/tech-icons/postgresql.svg)
+![Cloud Run](docs/assets/tech-icons/cloudrun.svg)
+![Neon](docs/assets/tech-icons/neon.svg)
+
+![GitHub Actions](docs/assets/tech-icons/github-actions.svg)
+![Resend](docs/assets/tech-icons/resend.svg)
+![Biome](docs/assets/tech-icons/biome.svg)
+
+| Layer | Technology | Hosting |
+|:------|:-----------|:--------|
+| Frontend | SvelteKit 2, Svelte 5, TailwindCSS 4 | Vercel |
+| Backend | Go 1.24, Echo | Cloud Run |
+| Database | PostgreSQL | Neon |
+| Email | Resend | Custom domain |
+| CI/CD | GitHub Actions | Automated testing & deployment |
+
+For technical deep-dive, see [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md).
 
 ---
 
-## Technical Implementation
+## Documentation
 
-See [docs/PLANNING.md](docs/PLANNING.md) for technical architecture and development details.
+| Document | Description |
+|:---------|:------------|
+| [frontend/README.md](frontend/README.md) | Frontend setup and development |
+| [backend/README.md](backend/README.md) | Backend setup and API reference |
+| [docs/SETUP.md](docs/SETUP.md) | Complete local development guide |
+| [docs/ROUTES.md](docs/ROUTES.md) | API routes reference |
+| [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md) | Technical architecture and decisions |
+| [docs/DEMO.md](docs/DEMO.md) | Email template testing guide |
+| [docs/PLANNING.md](docs/PLANNING.md) | Original hackathon planning document |
+| [docs/CLOUD_RUN_MIGRATION.md](docs/CLOUD_RUN_MIGRATION.md) | Fly.io to Cloud Run migration guide |
+
+---
+
+## Quick Start
+
+```bash
+# Clone
+git clone https://github.com/aidantrabs/kultur.git
+cd kultur
+
+# Backend
+cd backend
+cp .env.example .env  # Get values from codeowner
+go run ./cmd/server
+
+# Frontend (new terminal)
+cd frontend
+npm install
+npm run dev
+```
+
+See [docs/SETUP.md](docs/SETUP.md) for comprehensive instructions.
+
+---
+
+## The Team
+
+| Name | Role |
+|:-----|:-----|
+| **Aidan** | Backend Development |
+| **Tevin** | Frontend Development |
+| **Jahzara** | Content & Cultural Research |
+
+---
+
+<p align="center">
+  <strong>KULTUR</strong> · Your guide to Trinidad's cultural festivals
+</p>
+
+<p align="center">
+  <em>TrinbagoTech Hackathon 2026 · January 30 – February 2</em>
+</p>

@@ -529,7 +529,7 @@ GET  /api/unsubscribe/{token}
 
 > "We built this in 4 days. Imagine every festival documented like this. Imagine diaspora kids learning about Hosay before visiting home. Imagine tourists experiencing something real.
 >
-> [App Name]. Your guide to Trinidad's cultural festivals."
+> KULTUR. Your guide to Trinidad's cultural festivals."
 
 ### Remaining Time
 
@@ -600,7 +600,7 @@ build-api:
 
 # Deploy
 deploy-api:
-	cd backend && flyctl deploy
+	cd backend && gcloud run deploy kultur-api --source . --region us-central1 --allow-unauthenticated
 ```
 
 ### Commands
@@ -624,13 +624,79 @@ make deploy-api
 
 ---
 
+## What Was Built (Final State)
+
+This section documents what was actually implemented during the hackathon.
+
+### Production URLs
+
+| Service | URL |
+|:--------|:----|
+| Frontend | https://kultur-tt.app |
+| Backend API | https://kultur-api.fly.dev |
+| Email Domain | noreply@kultur-tt.app |
+
+### Tech Stack (Final)
+
+| Layer | Technology | Hosting |
+|:------|:-----------|:--------|
+| Frontend | SvelteKit 2, Svelte 5, TailwindCSS 4, shadcn-svelte | Vercel |
+| Backend | Go 1.24, Echo framework | Fly.io |
+| Database | PostgreSQL | Neon |
+| Email | Resend | Custom domain |
+| Linting | Biome | - |
+
+### Features Implemented
+
+**Frontend:**
+- Home page with hero section, featured festivals, newsletter signup
+- Festival calendar with month/region/heritage filters
+- Festival detail pages with full first-timer guides
+- Community memories section
+- Newsletter subscription with email validation
+- Responsive design (mobile, tablet, desktop)
+- Copy link functionality on festival pages
+
+**Backend:**
+- RESTful API with Echo framework
+- Festival CRUD operations
+- Memory submission with moderation
+- Email subscription system
+- Rate limiting (5/hour memories, 10/hour subscribe)
+- Admin API with API key authentication
+- Email templates (welcome, festival reminder, weekly digest)
+
+**Email System:**
+- Custom domain (noreply@kultur-tt.app)
+- Welcome email on subscription
+- Festival reminder template
+- Weekly digest template
+- Unsubscribe functionality
+
+### What Changed from Plan
+
+| Planned | Actual |
+|:--------|:-------|
+| Cloudflare Pages | Vercel |
+| Fly Postgres | Neon PostgreSQL |
+| pnpm | npm |
+| Chi router | Echo framework |
+| PWA with offline | Not implemented |
+
+### API Routes (Final)
+
+See [ROUTES.md](./ROUTES.md) for complete API documentation.
+
+---
+
 ## Post-Hackathon (Reference)
 
 If we want to continue:
 
-- Terraform for infrastructure-as-code (Neon, Fly.io, Cloudflare all have providers)
+- Terraform for infrastructure-as-code (Neon, Fly.io, Vercel all have providers)
 - GitHub Actions CI/CD
 - Partner outreach (Tourism Trinidad, NALIS, Santa Rosa Community)
-- Automated weekly digest emails
+- Automated weekly digest emails (cron job)
+- PWA with offline support
 
 But that's for later. **Focus on the hackathon.**

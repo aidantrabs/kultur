@@ -1,96 +1,96 @@
 <script lang="ts">
-	import { submitMemory } from '$lib/data/memories';
-	import { Button } from '$lib/components/ui/button';
-	import * as Card from '$lib/components/ui/card';
+    import { submitMemory } from '$lib/data/memories';
+    import { Button } from '$lib/components/ui/button';
+    import * as Card from '$lib/components/ui/card';
 
-	interface Props {
-		festivalId: string;
-		festivalName: string;
-		onSubmit?: (memory: MemorySubmission) => void;
-	}
+    interface Props {
+        festivalId: string;
+        festivalName: string;
+        onSubmit?: (memory: MemorySubmission) => void;
+    }
 
-	interface MemorySubmission {
-		festivalId: string;
-		authorName: string;
-		authorEmail: string;
-		content: string;
-		yearOfMemory: string;
-	}
+    interface MemorySubmission {
+        festivalId: string;
+        authorName: string;
+        authorEmail: string;
+        content: string;
+        yearOfMemory: string;
+    }
 
-	let { festivalId, festivalName, onSubmit }: Props = $props();
+    const { festivalId, festivalName, onSubmit }: Props = $props();
 
-	// Form state
-	let authorName = $state('');
-	let authorEmail = $state('');
-	let content = $state('');
-	let yearOfMemory = $state('');
+    // Form state
+    let authorName = $state('');
+    let authorEmail = $state('');
+    let content = $state('');
+    let yearOfMemory = $state('');
 
-	// UI state
-	let isSubmitting = $state(false);
-	let isSubmitted = $state(false);
-	let error = $state<string | null>(null);
+    // UI state
+    let isSubmitting = $state(false);
+    let isSubmitted = $state(false);
+    let error = $state<string | null>(null);
 
-	// Generate year options (last 30 years)
-	const currentYear = new Date().getFullYear();
-	const yearOptions = Array.from({ length: 30 }, (_, i) => currentYear - i);
+    // Generate year options (last 30 years)
+    const currentYear = new Date().getFullYear();
+    const yearOptions = Array.from({ length: 30 }, (_, i) => currentYear - i);
 
-	// Character count
-	const maxLength = 1000;
-	const charCount = $derived(content.length);
-	const isOverLimit = $derived(charCount > maxLength);
+    // Character count
+    const maxLength = 1000;
+    const charCount = $derived(content.length);
+    const isOverLimit = $derived(charCount > maxLength);
 
-	async function handleSubmit(e: Event) {
-		e.preventDefault();
-		error = null;
+    async function handleSubmit(e: Event) {
+        e.preventDefault();
+        error = null;
 
-		// Validation
-		if (!content.trim()) {
-			error = 'Please share your memory before submitting.';
-			return;
-		}
+        // Validation
+        if (!content.trim()) {
+            error = 'Please share your memory before submitting.';
+            return;
+        }
 
-		if (isOverLimit) {
-			error = `Your memory is too long. Please keep it under ${maxLength} characters.`;
-			return;
-		}
+        if (isOverLimit) {
+            error = `Your memory is too long. Please keep it under ${maxLength} characters.`;
+            return;
+        }
 
-		isSubmitting = true;
+        isSubmitting = true;
 
-		try {
-			const submission: MemorySubmission = {
-				festivalId,
-				authorName: authorName.trim(),
-				authorEmail: authorEmail.trim(),
-				content: content.trim(),
-				yearOfMemory,
-			};
+        try {
+            const submission: MemorySubmission = {
+                festivalId,
+                authorName: authorName.trim(),
+                authorEmail: authorEmail.trim(),
+                content: content.trim(),
+                yearOfMemory,
+            };
 
-			// Submit using API-aware function (handles both mock and real API)
-			await submitMemory(submission);
+            // Submit using API-aware function (handles both mock and real API)
+            await submitMemory(submission);
 
-			// Call optional callback
-			onSubmit?.(submission);
+            // Call optional callback
+            onSubmit?.(submission);
 
-			// Show success state
-			isSubmitted = true;
+            // Show success state
+            isSubmitted = true;
 
-			// Reset form
-			authorName = '';
-			authorEmail = '';
-			content = '';
-			yearOfMemory = '';
-		} catch (err) {
-			error = 'Something went wrong. Please try again.';
-			console.error('Memory submission error:', err);
-		} finally {
-			isSubmitting = false;
-		}
-	}
+            // Reset form
+            authorName = '';
+            authorEmail = '';
+            content = '';
+            yearOfMemory = '';
+        } catch (err) {
+            error = 'Something went wrong. Please try again.';
+            console.error('Memory submission error:', err);
+        } finally {
+            isSubmitting = false;
+        }
+    }
 
-	function resetForm() {
-		isSubmitted = false;
-		error = null;
-	}
+    function resetForm() {
+        isSubmitted = false;
+        error = null;
+    }
 </script>
 
 <Card.Root>

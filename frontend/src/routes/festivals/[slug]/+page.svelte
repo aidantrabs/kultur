@@ -1,45 +1,60 @@
 <script lang="ts">
-	import { marked } from 'marked';
-	import { Badge } from '$lib/components/ui/badge';
-	import { Button } from '$lib/components/ui/button';
-	import * as Card from '$lib/components/ui/card';
-	import { Separator } from '$lib/components/ui/separator';
-	import { FestivalCard } from '$lib/components/calendar';
-	import { MemoryCard, MemoryForm } from '$lib/components/memories';
-	import { heritageLabels, regionLabels } from '$lib/types/festival';
-	import type { HeritageType } from '$lib/types/festival';
-	import { formatDateRange, getRelativeTime } from '$lib/utils/calendar';
+    import { marked } from 'marked';
+    import { Badge } from '$lib/components/ui/badge';
+    import { Button } from '$lib/components/ui/button';
+    import * as Card from '$lib/components/ui/card';
+    import { Separator } from '$lib/components/ui/separator';
+    import { FestivalCard } from '$lib/components/calendar';
+    import { MemoryCard, MemoryForm } from '$lib/components/memories';
+    import { NewsletterSignup } from '$lib/components/newsletter';
+    import { heritageLabels, regionLabels } from '$lib/types/festival';
+    import type { HeritageType } from '$lib/types/festival';
+    import { formatDateRange, getRelativeTime } from '$lib/utils/calendar';
 
-	let { data } = $props();
-	const festival = $derived(data.festival);
-	const memories = $derived(data.memories);
-	const relatedFestivals = $derived(data.relatedFestivals);
+    const { data } = $props();
+    const festival = $derived(data.festival);
+    const memories = $derived(data.memories);
+    const relatedFestivals = $derived(data.relatedFestivals);
 
-	// Configure marked for safety
-	marked.setOptions({
-		breaks: true,
-		gfm: true,
-	});
+    // Configure marked for safety
+    marked.setOptions({
+        breaks: true,
+        gfm: true,
+    });
 
-	function getHeritageBadgeClass(heritage: HeritageType): string {
-		const classes: Record<HeritageType, string> = {
-			african: 'bg-heritage-african text-white',
-			indian: 'bg-heritage-indian text-black',
-			indigenous: 'bg-heritage-indigenous text-white',
-			mixed: 'bg-heritage-mixed text-white',
-			christian: 'bg-heritage-christian text-white',
-		};
-		return classes[heritage];
-	}
+    let linkCopied = $state(false);
 
-	function renderMarkdown(content: string | null): string {
-		if (!content) return '';
-		return marked.parse(content) as string;
-	}
+    function getHeritageBadgeClass(heritage: HeritageType): string {
+        const classes: Record<HeritageType, string> = {
+            african: 'bg-heritage-african text-white',
+            indian: 'bg-heritage-indian text-black',
+            indigenous: 'bg-heritage-indigenous text-white',
+            mixed: 'bg-heritage-mixed text-white',
+            christian: 'bg-heritage-christian text-white',
+        };
+        return classes[heritage];
+    }
+
+    function renderMarkdown(content: string | null): string {
+        if (!content) return '';
+        return marked.parse(content) as string;
+    }
+
+    async function copyLink() {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            linkCopied = true;
+            setTimeout(() => {
+                linkCopied = false;
+            }, 2000);
+        } catch (err) {
+            console.error('Failed to copy link:', err);
+        }
+    }
 </script>
 
 <svelte:head>
-	<title>{festival.name} | T&T Festivals</title>
+	<title>{festival.name} | KULTUR</title>
 	<meta name="description" content={festival.summary} />
 </svelte:head>
 
@@ -48,8 +63,9 @@
 	<header class="border-b bg-card/80 backdrop-blur-sm sticky top-0 z-50">
 		<div class="container max-w-6xl mx-auto px-4 py-4">
 			<div class="flex items-center justify-between">
-				<a href="/" class="text-xl font-bold text-tt-red hover:text-tt-red-dark transition-colors">
-					T&T Festivals
+				<a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+					<img src="/logo.png" alt="" class="h-10 w-10 logo-img" loading="eager" width="40" height="40" />
+					<span class="text-xl font-bold text-tt-red">KULTUR</span>
 				</a>
 				<nav class="flex items-center gap-4">
 					<a href="/" class="text-sm hover:text-tt-red transition-colors">Home</a>
@@ -347,12 +363,19 @@
 					</Card.Header>
 					<Card.Content>
 						<div class="flex gap-2">
-							<Button variant="outline" size="sm" class="flex-1">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
-									<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-									<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-								</svg>
-								Copy Link
+							<Button variant="outline" size="sm" class="flex-1" onclick={copyLink}>
+								{#if linkCopied}
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1 text-green-600">
+										<path d="M20 6 9 17l-5-5"/>
+									</svg>
+									Copied!
+								{:else}
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+										<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+										<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+									</svg>
+									Copy Link
+								{/if}
 							</Button>
 						</div>
 					</Card.Content>
@@ -378,6 +401,9 @@
 						<p>✓ Ask before photographing people</p>
 					</Card.Content>
 				</Card.Root>
+
+				<!-- Newsletter Signup -->
+				<NewsletterSignup variant="compact" />
 			</aside>
 		</div>
 

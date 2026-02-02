@@ -20,11 +20,11 @@ INSERT INTO memories (
 `
 
 type CreateMemoryParams struct {
-	FestivalID   pgtype.UUID `json:"festival_id"`
-	AuthorName   pgtype.Text `json:"author_name"`
-	AuthorEmail  pgtype.Text `json:"author_email"`
+	FestivalID   pgtype.UUID `json:"festivalId"`
+	AuthorName   pgtype.Text `json:"authorName"`
+	AuthorEmail  pgtype.Text `json:"authorEmail"`
 	Content      string      `json:"content"`
-	YearOfMemory pgtype.Text `json:"year_of_memory"`
+	YearOfMemory pgtype.Text `json:"yearOfMemory"`
 }
 
 func (q *Queries) CreateMemory(ctx context.Context, arg CreateMemoryParams) (Memory, error) {
@@ -49,6 +49,16 @@ func (q *Queries) CreateMemory(ctx context.Context, arg CreateMemoryParams) (Mem
 	return i, err
 }
 
+const deleteMemory = `-- name: DeleteMemory :exec
+DELETE FROM memories
+WHERE id = $1
+`
+
+func (q *Queries) DeleteMemory(ctx context.Context, id pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, deleteMemory, id)
+	return err
+}
+
 const getMemoryByID = `-- name: GetMemoryByID :one
 SELECT id, festival_id, author_name, author_email, content, year_of_memory, status, submitted_at FROM memories
 WHERE id = $1
@@ -68,6 +78,40 @@ func (q *Queries) GetMemoryByID(ctx context.Context, id pgtype.UUID) (Memory, er
 		&i.SubmittedAt,
 	)
 	return i, err
+}
+
+const listAllMemories = `-- name: ListAllMemories :many
+SELECT id, festival_id, author_name, author_email, content, year_of_memory, status, submitted_at FROM memories
+ORDER BY submitted_at DESC
+`
+
+func (q *Queries) ListAllMemories(ctx context.Context) ([]Memory, error) {
+	rows, err := q.db.Query(ctx, listAllMemories)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Memory{}
+	for rows.Next() {
+		var i Memory
+		if err := rows.Scan(
+			&i.ID,
+			&i.FestivalID,
+			&i.AuthorName,
+			&i.AuthorEmail,
+			&i.Content,
+			&i.YearOfMemory,
+			&i.Status,
+			&i.SubmittedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const listMemoriesByFestival = `-- name: ListMemoriesByFestival :many

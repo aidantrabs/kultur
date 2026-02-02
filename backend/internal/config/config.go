@@ -11,6 +11,9 @@ type Config struct {
     DatabaseURL    string
     ResendAPIKey   string
     AllowedOrigins string
+    AdminAPIKey    string
+    BaseURL        string
+    FromEmail      string
 }
 
 func Load() (*Config, error) {
@@ -22,6 +25,9 @@ func Load() (*Config, error) {
         DatabaseURL:    getEnv("DATABASE_URL", "postgres://postgres:postgres@localhost:5432/hackathon?sslmode=disable"),
         ResendAPIKey:   getEnv("RESEND_API_KEY", ""),
         AllowedOrigins: getEnv("ALLOWED_ORIGINS", "http://localhost:5173"),
+        AdminAPIKey:    getEnv("ADMIN_API_KEY", ""),
+        BaseURL:        getEnv("BASE_URL", "http://localhost:8080"),
+        FromEmail:      getEnv("FROM_EMAIL", "onboarding@resend.dev"),
     }, nil
 }
 

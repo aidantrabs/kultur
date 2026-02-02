@@ -1,36 +1,36 @@
 <script lang="ts">
-	import * as Select from '$lib/components/ui/select';
-	import { Button } from '$lib/components/ui/button';
-	import type { HeritageType, Region } from '$lib/types/festival';
-	import { heritageLabels, regionLabels } from '$lib/types/festival';
-	import { MONTH_NAMES } from '$lib/utils/calendar';
+    import * as Select from '$lib/components/ui/select';
+    import { Button } from '$lib/components/ui/button';
+    import type { HeritageType, Region } from '$lib/types/festival';
+    import { heritageLabels, regionLabels } from '$lib/types/festival';
+    import { MONTH_NAMES } from '$lib/utils/calendar';
 
-	interface Props {
-		selectedMonth: number | null;
-		selectedRegion: Region | null;
-		selectedHeritage: HeritageType | null;
-		onMonthChange: (month: number | null) => void;
-		onRegionChange: (region: Region | null) => void;
-		onHeritageChange: (heritage: HeritageType | null) => void;
-		onClearFilters: () => void;
-	}
+    interface Props {
+        selectedMonth: number | null;
+        selectedRegion: Region | null;
+        selectedHeritage: HeritageType | null;
+        onMonthChange: (month: number | null) => void;
+        onRegionChange: (region: Region | null) => void;
+        onHeritageChange: (heritage: HeritageType | null) => void;
+        onClearFilters: () => void;
+    }
 
-	let {
-		selectedMonth,
-		selectedRegion,
-		selectedHeritage,
-		onMonthChange,
-		onRegionChange,
-		onHeritageChange,
-		onClearFilters,
-	}: Props = $props();
+    const {
+        selectedMonth,
+        selectedRegion,
+        selectedHeritage,
+        onMonthChange,
+        onRegionChange,
+        onHeritageChange,
+        onClearFilters,
+    }: Props = $props();
 
-	const hasActiveFilters = $derived(
-		selectedMonth !== null || selectedRegion !== null || selectedHeritage !== null
-	);
+    const hasActiveFilters = $derived(
+        selectedMonth !== null || selectedRegion !== null || selectedHeritage !== null
+    );
 
-	const regions: Region[] = ['north', 'south', 'central', 'east', 'west', 'tobago', 'nationwide'];
-	const heritageTypes: HeritageType[] = ['african', 'indian', 'indigenous', 'mixed', 'christian'];
+    const regions: Region[] = ['north', 'south', 'central', 'east', 'west', 'tobago', 'nationwide'];
+    const heritageTypes: HeritageType[] = ['african', 'indian', 'indigenous', 'mixed', 'christian'];
 </script>
 
 <div class="flex flex-wrap items-center gap-3">

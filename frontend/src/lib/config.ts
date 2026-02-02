@@ -6,20 +6,20 @@ import { env } from '$env/dynamic/public';
  */
 
 export const config = {
-	// API base URL
-	apiUrl: env.PUBLIC_API_URL || 'http://localhost:8080',
+    // API base URL
+    apiUrl: env.PUBLIC_API_URL || 'http://localhost:8080',
 
-	// Data source: 'mock' or 'api'
-	// Change this in .env file: PUBLIC_DATA_SOURCE=api
-	dataSource: (env.PUBLIC_DATA_SOURCE || 'mock') as 'mock' | 'api',
+    // Data source: 'mock' or 'api'
+    // Change this in .env file: PUBLIC_DATA_SOURCE=api
+    dataSource: (env.PUBLIC_DATA_SOURCE || 'mock') as 'mock' | 'api',
 
-	// Helper to check if using API
-	get useApi() {
-		return this.dataSource === 'api';
-	},
+    // Helper to check if using API
+    get useApi() {
+        return this.dataSource === 'api';
+    },
 
-	// Helper to check if using mock data
-	get useMock() {
-		return this.dataSource === 'mock';
-	}
+    // Helper to check if using mock data
+    get useMock() {
+        return this.dataSource === 'mock';
+    },
 };

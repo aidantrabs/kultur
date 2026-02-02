@@ -18,3 +18,11 @@ WHERE id = $1;
 UPDATE memories
 SET status = $2
 WHERE id = $1;
+
+-- name: ListAllMemories :many
+SELECT * FROM memories
+ORDER BY submitted_at DESC;
+
+-- name: DeleteMemory :exec
+DELETE FROM memories
+WHERE id = $1;

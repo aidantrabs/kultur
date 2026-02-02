@@ -1,130 +1,135 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button';
-	import { Separator } from '$lib/components/ui/separator';
-	import { CalendarGrid, FestivalSidebar, FilterBar, FestivalCard } from '$lib/components/calendar';
-	import { festivals, getThisWeekFestivals } from '$lib/data/festivals';
-	import type { Festival, FestivalFilters, HeritageType, Region } from '$lib/types/festival';
-	import { MONTH_NAMES } from '$lib/utils/calendar';
+    import { Button } from '$lib/components/ui/button';
+    import { Separator } from '$lib/components/ui/separator';
+    import {
+        CalendarGrid,
+        FestivalSidebar,
+        FilterBar,
+        FestivalCard,
+    } from '$lib/components/calendar';
+    import { festivals, getThisWeekFestivals } from '$lib/data/festivals';
+    import type { Festival, FestivalFilters, HeritageType, Region } from '$lib/types/festival';
+    import { MONTH_NAMES } from '$lib/utils/calendar';
 
-	// Current calendar view state
-	let currentYear = $state(2026);
-	let currentMonth = $state(1); // February 2026 to show Carnival
+    // Current calendar view state
+    let currentYear = $state(2026);
+    let currentMonth = $state(1); // February 2026 to show Carnival
 
-	// Filter state
-	let filters = $state<FestivalFilters>({
-		month: null,
-		region: null,
-		heritageType: null,
-	});
+    // Filter state
+    let filters = $state<FestivalFilters>({
+        month: null,
+        region: null,
+        heritageType: null,
+    });
 
-	// Derived: check if any filters are active
-	const hasActiveFilters = $derived(
-		filters.month !== null || filters.region !== null || filters.heritageType !== null
-	);
+    // Derived: check if any filters are active
+    const hasActiveFilters = $derived(
+        filters.month !== null || filters.region !== null || filters.heritageType !== null
+    );
 
-	// Derived: filtered festivals based on current filters
-	const filteredFestivals = $derived.by(() => {
-		return festivals.filter((f) => {
-			// Filter by month (check if festival occurs in selected month)
-			if (filters.month !== null && f.date2026Start) {
-				const startMonth = new Date(f.date2026Start).getMonth();
-				const endMonth = f.date2026End ? new Date(f.date2026End).getMonth() : startMonth;
-				if (!(filters.month >= startMonth && filters.month <= endMonth)) {
-					return false;
-				}
-			}
+    // Derived: filtered festivals based on current filters
+    const filteredFestivals = $derived.by(() => {
+        return festivals.filter((f) => {
+            // Filter by month (check if festival occurs in selected month)
+            if (filters.month !== null && f.date2026Start) {
+                const startMonth = new Date(f.date2026Start).getMonth();
+                const endMonth = f.date2026End ? new Date(f.date2026End).getMonth() : startMonth;
+                if (!(filters.month >= startMonth && filters.month <= endMonth)) {
+                    return false;
+                }
+            }
 
-			// Filter by region
-			if (filters.region !== null && f.region !== filters.region) {
-				return false;
-			}
+            // Filter by region
+            if (filters.region !== null && f.region !== filters.region) {
+                return false;
+            }
 
-			// Filter by heritage type
-			if (filters.heritageType !== null && f.heritageType !== filters.heritageType) {
-				return false;
-			}
+            // Filter by heritage type
+            if (filters.heritageType !== null && f.heritageType !== filters.heritageType) {
+                return false;
+            }
 
-			return true;
-		});
-	});
+            return true;
+        });
+    });
 
-	// Set of filtered festival IDs for quick lookup
-	const filteredFestivalIds = $derived(new Set(filteredFestivals.map((f) => f.id)));
+    // Set of filtered festival IDs for quick lookup
+    const filteredFestivalIds = $derived(new Set(filteredFestivals.map((f) => f.id)));
 
-	// Sidebar festivals (sorted by date)
-	const sidebarFestivals = $derived(
-		[...filteredFestivals].sort((a, b) => {
-			if (!a.date2026Start) return 1;
-			if (!b.date2026Start) return -1;
-			return new Date(a.date2026Start).getTime() - new Date(b.date2026Start).getTime();
-		})
-	);
+    // Sidebar festivals (sorted by date)
+    const sidebarFestivals = $derived(
+        [...filteredFestivals].sort((a, b) => {
+            if (!a.date2026Start) return 1;
+            if (!b.date2026Start) return -1;
+            return new Date(a.date2026Start).getTime() - new Date(b.date2026Start).getTime();
+        })
+    );
 
-	// "This Week" festivals - using a demo date in February 2026 to show Carnival
-	const thisWeekFestivals = $derived.by(() => {
-		// For demo purposes, use Feb 10, 2026 as "today" to show Carnival in "upcoming"
-		const demoToday = new Date('2026-02-10');
-		return getThisWeekFestivals(demoToday);
-	});
+    // "This Week" festivals - using a demo date in February 2026 to show Carnival
+    const thisWeekFestivals = $derived.by(() => {
+        // For demo purposes, use Feb 10, 2026 as "today" to show Carnival in "upcoming"
+        const demoToday = new Date('2026-02-10');
+        return getThisWeekFestivals(demoToday);
+    });
 
-	// Navigation
-	function prevMonth() {
-		if (currentMonth === 0) {
-			currentMonth = 11;
-			currentYear--;
-		} else {
-			currentMonth--;
-		}
-	}
+    // Navigation
+    function prevMonth() {
+        if (currentMonth === 0) {
+            currentMonth = 11;
+            currentYear--;
+        } else {
+            currentMonth--;
+        }
+    }
 
-	function nextMonth() {
-		if (currentMonth === 11) {
-			currentMonth = 0;
-			currentYear++;
-		} else {
-			currentMonth++;
-		}
-	}
+    function nextMonth() {
+        if (currentMonth === 11) {
+            currentMonth = 0;
+            currentYear++;
+        } else {
+            currentMonth++;
+        }
+    }
 
-	function goToToday() {
-		// For demo, go to February 2026
-		currentYear = 2026;
-		currentMonth = 1;
-	}
+    function goToToday() {
+        // For demo, go to February 2026
+        currentYear = 2026;
+        currentMonth = 1;
+    }
 
-	// Filter handlers
-	function handleMonthChange(month: number | null) {
-		filters.month = month;
-		// If a month is selected, navigate calendar to that month
-		if (month !== null) {
-			currentMonth = month;
-		}
-	}
+    // Filter handlers
+    function handleMonthChange(month: number | null) {
+        filters.month = month;
+        // If a month is selected, navigate calendar to that month
+        if (month !== null) {
+            currentMonth = month;
+        }
+    }
 
-	function handleRegionChange(region: Region | null) {
-		filters.region = region;
-	}
+    function handleRegionChange(region: Region | null) {
+        filters.region = region;
+    }
 
-	function handleHeritageChange(heritage: HeritageType | null) {
-		filters.heritageType = heritage;
-	}
+    function handleHeritageChange(heritage: HeritageType | null) {
+        filters.heritageType = heritage;
+    }
 
-	function clearFilters() {
-		filters = { month: null, region: null, heritageType: null };
-	}
+    function clearFilters() {
+        filters = { month: null, region: null, heritageType: null };
+    }
 
-	// Day click handler
-	function handleDayClick(date: Date, dayFestivals: Festival[]) {
-		// Could open a modal or navigate to first festival
-		if (dayFestivals.length === 1) {
-			window.location.href = `/festivals/${dayFestivals[0].slug}`;
-		}
-		// For multiple festivals, could show a popover (future enhancement)
-	}
+    // Day click handler
+    function handleDayClick(_date: Date, dayFestivals: Festival[]) {
+        // Could open a modal or navigate to first festival
+        if (dayFestivals.length === 1) {
+            window.location.href = `/festivals/${dayFestivals[0].slug}`;
+        }
+        // For multiple festivals, could show a popover (future enhancement)
+    }
 </script>
 
 <svelte:head>
-	<title>Festival Calendar | Trinidad & Tobago Cultural Festivals</title>
+	<title>Festival Calendar | KULTUR</title>
 	<meta name="description" content="Discover Trinidad & Tobago's cultural festivals. Browse by month, region, or heritage type." />
 </svelte:head>
 
@@ -134,8 +139,9 @@
 		<div class="container max-w-6xl mx-auto px-4 py-4">
 			<div class="flex items-center justify-between">
 				<div>
-					<a href="/" class="text-xl font-bold text-tt-red hover:text-tt-red-dark transition-colors">
-						T&T Festivals
+					<a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+						<img src="/logo.png" alt="" class="h-10 w-10 logo-img" loading="eager" width="40" height="40" />
+						<span class="text-xl font-bold text-tt-red">KULTUR</span>
 					</a>
 					<p class="text-sm text-muted-foreground">Your guide to Trinidad & Tobago's cultural celebrations</p>
 				</div>
@@ -249,7 +255,7 @@
 		<section class="mb-8">
 			<div class="flex items-center justify-between mb-4">
 				<div>
-					<h2 class="text-2xl font-bold">This Week in T&T Culture</h2>
+					<h2 class="text-2xl font-bold">This Week in T&T</h2>
 					<p class="text-muted-foreground text-sm">Festivals happening in the next 2 weeks</p>
 				</div>
 			</div>

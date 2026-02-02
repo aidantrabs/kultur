@@ -5,12 +5,14 @@ import (
     "log"
     "net/http"
     "strings"
+    "time"
 
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/config"
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/db"
-    "github.com/aidantrabs/trinbago-hackathon/backend/internal/handler"
+    "github.com/aidantrabs/kultur/backend/internal/config"
+    "github.com/aidantrabs/kultur/backend/internal/db"
+    "github.com/aidantrabs/kultur/backend/internal/handler"
+    "github.com/aidantrabs/kultur/backend/internal/middleware"
     "github.com/labstack/echo/v4"
-    "github.com/labstack/echo/v4/middleware"
+    echomw "github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
@@ -27,37 +29,77 @@ func main() {
     }
     defer pool.Close()
 
-    h := handler.New(pool)
+    h := handler.New(pool, handler.Config{
+        ResendAPIKey: cfg.ResendAPIKey,
+        FromEmail:    cfg.FromEmail,
+        BaseURL:      cfg.BaseURL,
+    })
 
     e := echo.New()
     e.HideBanner = true
 
-    // middleware
-    e.Use(middleware.Logger())
-    e.Use(middleware.Recover())
-    e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+    // global middleware
+    e.Use(echomw.Logger())
+    e.Use(echomw.Recover())
+    e.Use(echomw.CORSWithConfig(echomw.CORSConfig{
         AllowOrigins:     strings.Split(cfg.AllowedOrigins, ","),
-        AllowMethods:     []string{http.MethodGet, http.MethodPost, http.MethodOptions},
-        AllowHeaders:     []string{echo.HeaderContentType},
+        AllowMethods:     []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete, http.MethodOptions},
+        AllowHeaders:     []string{echo.HeaderContentType, "X-API-Key"},
         AllowCredentials: true,
     }))
 
-    // routes
+    // rate limiters
+    memoryRateLimiter := middleware.NewRateLimiter(5, time.Hour)       // 5/hour for memories
+    subscribeRateLimiter := middleware.NewRateLimiter(10, time.Hour)  // 10/hour for subscribe
+
+    // health check
+    e.GET("/health", h.Health)
+
+    // public api routes
     api := e.Group("/api")
 
-    // festivals
+    // festivals (public)
     api.GET("/festivals", h.ListFestivals)
     api.GET("/festivals/upcoming", h.ListUpcomingFestivals)
+    api.GET("/festivals/calendar", h.ListFestivalsByYear)
     api.GET("/festivals/:slug", h.GetFestival)
+    api.GET("/festivals/:slug/dates", h.GetFestivalDates)
     api.GET("/festivals/:slug/memories", h.ListMemoriesByFestival)
 
-    // memories
-    api.POST("/memories", h.CreateMemory)
+    // memories (public, rate limited)
+    api.POST("/memories", h.CreateMemory, memoryRateLimiter.Middleware())
 
-    // subscriptions
-    api.POST("/subscribe", h.Subscribe)
+    // subscriptions (public)
+    api.POST("/subscribe", h.Subscribe, subscribeRateLimiter.Middleware())
     api.GET("/subscribe/confirm/:token", h.ConfirmSubscription)
     api.GET("/unsubscribe/:token", h.Unsubscribe)
+
+    // admin routes (protected)
+    admin := api.Group("/admin", middleware.APIKeyAuth(cfg.AdminAPIKey))
+
+    // admin: memories
+    admin.GET("/memories", h.ListAllMemories)
+    admin.PATCH("/memories/:id", h.UpdateMemoryStatus)
+    admin.DELETE("/memories/:id", h.DeleteMemory)
+
+    // admin: subscriptions
+    admin.GET("/subscriptions", h.ListAllSubscriptions)
+    admin.DELETE("/subscriptions/:id", h.DeleteSubscription)
+
+    // admin: festivals
+    admin.POST("/festivals", h.CreateFestival)
+    admin.PUT("/festivals/:id", h.UpdateFestival)
+    admin.DELETE("/festivals/:id", h.DeleteFestival)
+
+    // admin: festival dates
+    admin.POST("/festival-dates", h.CreateFestivalDate)
+    admin.PUT("/festival-dates/:id", h.UpdateFestivalDate)
+    admin.DELETE("/festival-dates/:id", h.DeleteFestivalDate)
+
+    // admin: test emails
+    admin.POST("/test-email/welcome", h.TestWelcomeEmail)
+    admin.POST("/test-email/reminder", h.TestFestivalReminder)
+    admin.POST("/test-email/digest", h.TestWeeklyDigest)
 
     log.Printf("server starting on port %s", cfg.Port)
     e.Logger.Fatal(e.Start(":" + cfg.Port))

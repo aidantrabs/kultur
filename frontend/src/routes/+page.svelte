@@ -1,26 +1,32 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button';
-	import { FestivalCard } from '$lib/components/calendar';
-	import { festivals, getThisWeekFestivals } from '$lib/data/festivals';
-	import { heritageLabels } from '$lib/types/festival';
+    import { Button } from '$lib/components/ui/button';
+    import { FestivalCard } from '$lib/components/calendar';
+    import { NewsletterSignup } from '$lib/components/newsletter';
+    import { festivals, getThisWeekFestivals } from '$lib/data/festivals';
+    import { heritageLabels } from '$lib/types/festival';
 
-	// Featured festivals for hero section
-	const featuredFestivals = festivals.slice(0, 3);
-	
-	// "This Week" using demo date
-	const thisWeekFestivals = getThisWeekFestivals(new Date('2026-02-10'));
-	
-	// Stats for impact section
-	const stats = {
-		festivals: festivals.length,
-		heritageTypes: new Set(festivals.map(f => f.heritageType)).size,
-		regions: new Set(festivals.map(f => f.region)).size,
-	};
+    // Featured festivals for hero section
+    const featuredFestivals = festivals.slice(0, 3);
+
+    // "This Week" using demo date
+    const thisWeekFestivals = getThisWeekFestivals(new Date('2026-02-10'));
+
+    // Stats for impact section
+    const stats = {
+        festivals: festivals.length,
+        heritageTypes: new Set(festivals.map((f) => f.heritageType)).size,
+        regions: new Set(festivals.map((f) => f.region)).size,
+    };
 </script>
 
 <svelte:head>
-	<title>T&T Festivals | Your Guide to Trinidad & Tobago's Cultural Celebrations</title>
+	<title>KULTUR | Your Guide to Trinidad & Tobago's Cultural Celebrations</title>
 	<meta name="description" content="Discover 20+ cultural festivals across Trinidad & Tobago. From Carnival to Hosay, find your next authentic cultural experience." />
+	<meta property="og:title" content="KULTUR | Trinidad & Tobago Cultural Festivals" />
+	<meta property="og:description" content="Discover 20+ cultural festivals across Trinidad & Tobago. From Carnival to Hosay, find your next authentic cultural experience." />
+	<meta property="og:url" content="https://kultur-tt.vercel.app" />
+	<meta name="twitter:title" content="KULTUR | Trinidad & Tobago Cultural Festivals" />
+	<meta name="twitter:description" content="Discover 20+ cultural festivals across Trinidad & Tobago." />
 </svelte:head>
 
 <div class="min-h-screen bg-background">
@@ -28,8 +34,9 @@
 	<header class="border-b bg-card/80 backdrop-blur-sm sticky top-0 z-50">
 		<div class="container max-w-6xl mx-auto px-4 py-4">
 			<div class="flex items-center justify-between">
-				<a href="/" class="text-xl font-bold text-tt-red hover:text-tt-red-dark transition-colors">
-					T&T Festivals
+				<a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+					<img src="/logo.png" alt="" class="h-10 w-10 logo-img" loading="eager" width="40" height="40" />
+					<span class="text-xl font-bold text-tt-red">KULTUR</span>
 				</a>
 				<nav class="flex items-center gap-4">
 					<a href="/" class="text-sm font-medium text-tt-red">Home</a>
@@ -39,59 +46,61 @@
 		</div>
 	</header>
 
-	<!-- Hero Section -->
-	<section class="relative bg-linear-to-br from-tt-black via-tt-black to-tt-red/20 text-white">
-		<div class="absolute inset-0 bg-[url('https://www.cultursmag.com/wp-content/uploads/2024/05/Carnival-in-Trinidad-Photo-credit-Hayden-Greene.jpg')] bg-cover bg-center opacity-20"></div>
-		<div class="relative container max-w-6xl mx-auto px-4 py-20 lg:py-32">
-			<div class="max-w-3xl">
-				<h1 class="text-4xl lg:text-6xl font-bold mb-6">
-					Discover Trinidad & Tobago's 
-					<span class="text-tt-gold">Cultural Festivals</span>
-				</h1>
-				<p class="text-lg lg:text-xl text-gray-300 mb-8 leading-relaxed">
-					Your first-timer's guide to 20+ festivals spanning African, Indian, Indigenous, and mixed heritage. 
-					Know what to expect, how to participate, and experience authentic culture.
-				</p>
-				<div class="flex flex-wrap gap-4">
-					<Button href="/festivals" size="lg" class="bg-tt-red hover:bg-tt-red-dark text-white">
-						Explore the Calendar
-						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
-							<path d="m9 18 6-6-6-6"/>
-						</svg>
-					</Button>
-					<Button href="#this-week" variant="outline" size="lg" class="border-white text-black hover:bg-gray-1000">
-						What's Coming Up
-					</Button>
+	<div class="min-h-[calc(100dvh-72px)] flex flex-col">
+		<!-- Hero Section -->
+		<section class="relative bg-linear-to-br from-tt-black via-tt-black to-tt-red/20 text-white flex-1 flex items-center">
+			<div class="absolute inset-0 bg-[url('https://www.cultursmag.com/wp-content/uploads/2024/05/Carnival-in-Trinidad-Photo-credit-Hayden-Greene.jpg')] bg-cover bg-center opacity-20"></div>
+			<div class="relative container max-w-6xl mx-auto px-4 py-12 lg:py-20">
+				<div class="max-w-3xl">
+					<h1 class="text-4xl lg:text-6xl font-bold mb-6">
+						Discover Trinidad & Tobago's
+						<span class="text-tt-gold">Cultural Festivals</span>
+					</h1>
+					<p class="text-lg lg:text-xl text-gray-300 mb-8 leading-relaxed">
+						Your first-timer's guide to 20+ festivals spanning African, Indian, Indigenous, and mixed heritage.
+						Know what to expect, how to participate, and experience authentic culture.
+					</p>
+					<div class="flex flex-wrap gap-4">
+						<Button href="/festivals" size="lg" class="bg-tt-red hover:bg-tt-red-dark text-white">
+							Explore the Calendar
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
+								<path d="m9 18 6-6-6-6"/>
+							</svg>
+						</Button>
+						<Button href="#this-week" variant="outline" size="lg" class="border-white text-black hover:bg-gray-1000">
+							What's Coming Up
+						</Button>
+					</div>
 				</div>
 			</div>
-		</div>
-	</section>
+		</section>
 
-	<!-- Stats Section -->
-	<section class="bg-card border-b">
-		<div class="container max-w-6xl mx-auto px-4 py-8">
-			<div class="grid grid-cols-3 gap-4 text-center">
-				<div>
-					<p class="text-3xl font-bold text-tt-red">{stats.festivals}+</p>
-					<p class="text-sm text-muted-foreground">Cultural Festivals</p>
-				</div>
-				<div>
-					<p class="text-3xl font-bold text-tt-red">{stats.heritageTypes}</p>
-					<p class="text-sm text-muted-foreground">Heritage Types</p>
-				</div>
-				<div>
-					<p class="text-3xl font-bold text-tt-red">{stats.regions}</p>
-					<p class="text-sm text-muted-foreground">Regions Covered</p>
+		<!-- Stats Section -->
+		<section class="bg-card border-b shrink-0">
+			<div class="container max-w-6xl mx-auto px-4 py-8">
+				<div class="grid grid-cols-3 gap-4 text-center">
+					<div>
+						<p class="text-3xl font-bold text-tt-red">{stats.festivals}+</p>
+						<p class="text-sm text-muted-foreground">Cultural Festivals</p>
+					</div>
+					<div>
+						<p class="text-3xl font-bold text-tt-red">{stats.heritageTypes}</p>
+						<p class="text-sm text-muted-foreground">Heritage Types</p>
+					</div>
+					<div>
+						<p class="text-3xl font-bold text-tt-red">{stats.regions}</p>
+						<p class="text-sm text-muted-foreground">Regions Covered</p>
+					</div>
 				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+	</div>
 
 	<!-- This Week Section -->
 	<section id="this-week" class="container max-w-6xl mx-auto px-4 py-12">
 		<div class="flex items-center justify-between mb-6">
 			<div>
-				<h2 class="text-2xl lg:text-3xl font-bold">This Week in T&T Culture</h2>
+				<h2 class="text-2xl lg:text-3xl font-bold">This Week in T&T</h2>
 				<p class="text-muted-foreground">Festivals happening in the next 2 weeks</p>
 			</div>
 			<Button href="/festivals" variant="outline">
@@ -181,6 +190,20 @@
 		</div>
 	</section>
 
+	<!-- CTA Section -->
+	<section class="bg-tt-red text-white py-12">
+		<div class="container max-w-6xl mx-auto px-4 text-center">
+			<h2 class="text-2xl lg:text-3xl font-bold mb-4">Ready to Explore?</h2>
+			<p class="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
+				Whether you're a first-timer, returning local, or curious visitor,
+				find your next authentic cultural experience.
+			</p>
+			<Button href="/festivals" size="lg" class="bg-white text-tt-red hover:bg-gray-100">
+				Browse the Festival Calendar
+			</Button>
+		</div>
+	</section>
+
 	<!-- Featured Festivals -->
 	<section class="container max-w-6xl mx-auto px-4 py-12">
 		<h2 class="text-2xl lg:text-3xl font-bold mb-6">Featured Festivals</h2>
@@ -196,26 +219,18 @@
 		</div>
 	</section>
 
-	<!-- CTA Section -->
-	<section class="bg-tt-red text-white py-12">
-		<div class="container max-w-6xl mx-auto px-4 text-center">
-			<h2 class="text-2xl lg:text-3xl font-bold mb-4">Ready to Explore?</h2>
-			<p class="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
-				Whether you're a first-timer, returning local, or curious visitor, 
-				find your next authentic cultural experience.
-			</p>
-			<Button href="/festivals" size="lg" class="bg-white text-tt-red hover:bg-gray-100">
-				Browse the Festival Calendar
-			</Button>
-		</div>
-	</section>
+	<!-- Newsletter Signup Section -->
+	<NewsletterSignup variant="hero" />
 
 	<!-- Footer -->
 	<footer class="border-t bg-card">
 		<div class="container max-w-6xl mx-auto px-4 py-8">
 			<div class="flex flex-col md:flex-row items-center justify-between gap-4">
 				<div class="text-center md:text-left">
-					<p class="font-semibold text-tt-red">T&T Festivals</p>
+					<div class="flex items-center gap-2 justify-center md:justify-start">
+						<img src="/logo.png" alt="" class="h-8 w-8 logo-img" loading="eager" width="32" height="32" />
+						<p class="font-semibold text-tt-red">KULTUR</p>
+					</div>
 					<p class="text-sm text-muted-foreground">Your guide to Trinidad & Tobago's cultural celebrations</p>
 				</div>
 				<p class="text-sm text-muted-foreground">
