@@ -133,6 +133,40 @@ func (q *Queries) GetSubscriptionByUnsubscribeToken(ctx context.Context, unsubsc
 	return i, err
 }
 
+const listAllSubscriptions = `-- name: ListAllSubscriptions :many
+SELECT id, email, digest_weekly, festival_reminders, confirmed, confirmation_token, unsubscribe_token, created_at FROM subscriptions
+ORDER BY created_at DESC
+`
+
+func (q *Queries) ListAllSubscriptions(ctx context.Context) ([]Subscription, error) {
+	rows, err := q.db.Query(ctx, listAllSubscriptions)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Subscription{}
+	for rows.Next() {
+		var i Subscription
+		if err := rows.Scan(
+			&i.ID,
+			&i.Email,
+			&i.DigestWeekly,
+			&i.FestivalReminders,
+			&i.Confirmed,
+			&i.ConfirmationToken,
+			&i.UnsubscribeToken,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listConfirmedWeeklyDigest = `-- name: ListConfirmedWeeklyDigest :many
 SELECT id, email, digest_weekly, festival_reminders, confirmed, confirmation_token, unsubscribe_token, created_at FROM subscriptions
 WHERE confirmed = true AND digest_weekly = true

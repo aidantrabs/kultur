@@ -13,9 +13,6 @@ type Festival struct {
 	Slug             string             `json:"slug"`
 	Name             string             `json:"name"`
 	DateType         string             `json:"date_type"`
-	UsualMonth       pgtype.Text        `json:"usual_month"`
-	Date2026Start    pgtype.Date        `json:"date_2026_start"`
-	Date2026End      pgtype.Date        `json:"date_2026_end"`
 	Region           string             `json:"region"`
 	HeritageType     string             `json:"heritage_type"`
 	FestivalType     string             `json:"festival_type"`
@@ -29,6 +26,16 @@ type Festival struct {
 	VideoEmbeds      []byte             `json:"video_embeds"`
 	IsPublished      pgtype.Bool        `json:"is_published"`
 	CreatedAt        pgtype.Timestamptz `json:"created_at"`
+}
+
+type FestivalDate struct {
+	ID          pgtype.UUID        `json:"id"`
+	FestivalID  pgtype.UUID        `json:"festival_id"`
+	Year        int32              `json:"year"`
+	StartDate   pgtype.Date        `json:"start_date"`
+	EndDate     pgtype.Date        `json:"end_date"`
+	IsTentative pgtype.Bool        `json:"is_tentative"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
 }
 
 type Memory struct {

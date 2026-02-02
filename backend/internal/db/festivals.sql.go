@@ -13,22 +13,18 @@ import (
 
 const createFestival = `-- name: CreateFestival :one
 INSERT INTO festivals (
-    slug, name, date_type, usual_month, date_2026_start, date_2026_end,
-    region, heritage_type, festival_type, summary, story, what_to_expect,
-    how_to_participate, practical_info, cover_image_url, gallery_images,
-    video_embeds, is_published
+    slug, name, date_type, region, heritage_type, festival_type,
+    summary, story, what_to_expect, how_to_participate, practical_info,
+    cover_image_url, gallery_images, video_embeds, is_published
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18
-) RETURNING id, slug, name, date_type, usual_month, date_2026_start, date_2026_end, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15
+) RETURNING id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at
 `
 
 type CreateFestivalParams struct {
 	Slug             string      `json:"slug"`
 	Name             string      `json:"name"`
 	DateType         string      `json:"date_type"`
-	UsualMonth       pgtype.Text `json:"usual_month"`
-	Date2026Start    pgtype.Date `json:"date_2026_start"`
-	Date2026End      pgtype.Date `json:"date_2026_end"`
 	Region           string      `json:"region"`
 	HeritageType     string      `json:"heritage_type"`
 	FestivalType     string      `json:"festival_type"`
@@ -48,9 +44,6 @@ func (q *Queries) CreateFestival(ctx context.Context, arg CreateFestivalParams) 
 		arg.Slug,
 		arg.Name,
 		arg.DateType,
-		arg.UsualMonth,
-		arg.Date2026Start,
-		arg.Date2026End,
 		arg.Region,
 		arg.HeritageType,
 		arg.FestivalType,
@@ -70,9 +63,6 @@ func (q *Queries) CreateFestival(ctx context.Context, arg CreateFestivalParams) 
 		&i.Slug,
 		&i.Name,
 		&i.DateType,
-		&i.UsualMonth,
-		&i.Date2026Start,
-		&i.Date2026End,
 		&i.Region,
 		&i.HeritageType,
 		&i.FestivalType,
@@ -90,8 +80,18 @@ func (q *Queries) CreateFestival(ctx context.Context, arg CreateFestivalParams) 
 	return i, err
 }
 
+const deleteFestival = `-- name: DeleteFestival :exec
+DELETE FROM festivals
+WHERE id = $1
+`
+
+func (q *Queries) DeleteFestival(ctx context.Context, id pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, deleteFestival, id)
+	return err
+}
+
 const getFestivalByID = `-- name: GetFestivalByID :one
-SELECT id, slug, name, date_type, usual_month, date_2026_start, date_2026_end, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
+SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
 WHERE id = $1
 `
 
@@ -103,9 +103,6 @@ func (q *Queries) GetFestivalByID(ctx context.Context, id pgtype.UUID) (Festival
 		&i.Slug,
 		&i.Name,
 		&i.DateType,
-		&i.UsualMonth,
-		&i.Date2026Start,
-		&i.Date2026End,
 		&i.Region,
 		&i.HeritageType,
 		&i.FestivalType,
@@ -124,7 +121,7 @@ func (q *Queries) GetFestivalByID(ctx context.Context, id pgtype.UUID) (Festival
 }
 
 const getFestivalBySlug = `-- name: GetFestivalBySlug :one
-SELECT id, slug, name, date_type, usual_month, date_2026_start, date_2026_end, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
+SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
 WHERE slug = $1 AND is_published = true
 `
 
@@ -136,9 +133,6 @@ func (q *Queries) GetFestivalBySlug(ctx context.Context, slug string) (Festival,
 		&i.Slug,
 		&i.Name,
 		&i.DateType,
-		&i.UsualMonth,
-		&i.Date2026Start,
-		&i.Date2026End,
 		&i.Region,
 		&i.HeritageType,
 		&i.FestivalType,
@@ -157,9 +151,9 @@ func (q *Queries) GetFestivalBySlug(ctx context.Context, slug string) (Festival,
 }
 
 const listFestivals = `-- name: ListFestivals :many
-SELECT id, slug, name, date_type, usual_month, date_2026_start, date_2026_end, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
+SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
 WHERE is_published = true
-ORDER BY date_2026_start ASC NULLS LAST
+ORDER BY name ASC
 `
 
 func (q *Queries) ListFestivals(ctx context.Context) ([]Festival, error) {
@@ -176,9 +170,6 @@ func (q *Queries) ListFestivals(ctx context.Context) ([]Festival, error) {
 			&i.Slug,
 			&i.Name,
 			&i.DateType,
-			&i.UsualMonth,
-			&i.Date2026Start,
-			&i.Date2026End,
 			&i.Region,
 			&i.HeritageType,
 			&i.FestivalType,
@@ -204,9 +195,9 @@ func (q *Queries) ListFestivals(ctx context.Context) ([]Festival, error) {
 }
 
 const listFestivalsByHeritage = `-- name: ListFestivalsByHeritage :many
-SELECT id, slug, name, date_type, usual_month, date_2026_start, date_2026_end, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
+SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
 WHERE is_published = true AND heritage_type = $1
-ORDER BY date_2026_start ASC NULLS LAST
+ORDER BY name ASC
 `
 
 func (q *Queries) ListFestivalsByHeritage(ctx context.Context, heritageType string) ([]Festival, error) {
@@ -223,9 +214,6 @@ func (q *Queries) ListFestivalsByHeritage(ctx context.Context, heritageType stri
 			&i.Slug,
 			&i.Name,
 			&i.DateType,
-			&i.UsualMonth,
-			&i.Date2026Start,
-			&i.Date2026End,
 			&i.Region,
 			&i.HeritageType,
 			&i.FestivalType,
@@ -251,9 +239,9 @@ func (q *Queries) ListFestivalsByHeritage(ctx context.Context, heritageType stri
 }
 
 const listFestivalsByRegion = `-- name: ListFestivalsByRegion :many
-SELECT id, slug, name, date_type, usual_month, date_2026_start, date_2026_end, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
+SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
 WHERE is_published = true AND region = $1
-ORDER BY date_2026_start ASC NULLS LAST
+ORDER BY name ASC
 `
 
 func (q *Queries) ListFestivalsByRegion(ctx context.Context, region string) ([]Festival, error) {
@@ -270,9 +258,6 @@ func (q *Queries) ListFestivalsByRegion(ctx context.Context, region string) ([]F
 			&i.Slug,
 			&i.Name,
 			&i.DateType,
-			&i.UsualMonth,
-			&i.Date2026Start,
-			&i.Date2026End,
 			&i.Region,
 			&i.HeritageType,
 			&i.FestivalType,
@@ -297,51 +282,84 @@ func (q *Queries) ListFestivalsByRegion(ctx context.Context, region string) ([]F
 	return items, nil
 }
 
-const listUpcomingFestivals = `-- name: ListUpcomingFestivals :many
-SELECT id, slug, name, date_type, usual_month, date_2026_start, date_2026_end, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
-WHERE is_published = true
-  AND date_2026_start >= CURRENT_DATE
-  AND date_2026_start <= CURRENT_DATE + INTERVAL '30 days'
-ORDER BY date_2026_start ASC
+const updateFestival = `-- name: UpdateFestival :one
+UPDATE festivals SET
+    slug = $2,
+    name = $3,
+    date_type = $4,
+    region = $5,
+    heritage_type = $6,
+    festival_type = $7,
+    summary = $8,
+    story = $9,
+    what_to_expect = $10,
+    how_to_participate = $11,
+    practical_info = $12,
+    cover_image_url = $13,
+    gallery_images = $14,
+    video_embeds = $15,
+    is_published = $16
+WHERE id = $1
+RETURNING id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at
 `
 
-func (q *Queries) ListUpcomingFestivals(ctx context.Context) ([]Festival, error) {
-	rows, err := q.db.Query(ctx, listUpcomingFestivals)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []Festival{}
-	for rows.Next() {
-		var i Festival
-		if err := rows.Scan(
-			&i.ID,
-			&i.Slug,
-			&i.Name,
-			&i.DateType,
-			&i.UsualMonth,
-			&i.Date2026Start,
-			&i.Date2026End,
-			&i.Region,
-			&i.HeritageType,
-			&i.FestivalType,
-			&i.Summary,
-			&i.Story,
-			&i.WhatToExpect,
-			&i.HowToParticipate,
-			&i.PracticalInfo,
-			&i.CoverImageUrl,
-			&i.GalleryImages,
-			&i.VideoEmbeds,
-			&i.IsPublished,
-			&i.CreatedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
+type UpdateFestivalParams struct {
+	ID               pgtype.UUID `json:"id"`
+	Slug             string      `json:"slug"`
+	Name             string      `json:"name"`
+	DateType         string      `json:"date_type"`
+	Region           string      `json:"region"`
+	HeritageType     string      `json:"heritage_type"`
+	FestivalType     string      `json:"festival_type"`
+	Summary          string      `json:"summary"`
+	Story            pgtype.Text `json:"story"`
+	WhatToExpect     pgtype.Text `json:"what_to_expect"`
+	HowToParticipate pgtype.Text `json:"how_to_participate"`
+	PracticalInfo    pgtype.Text `json:"practical_info"`
+	CoverImageUrl    pgtype.Text `json:"cover_image_url"`
+	GalleryImages    []byte      `json:"gallery_images"`
+	VideoEmbeds      []byte      `json:"video_embeds"`
+	IsPublished      pgtype.Bool `json:"is_published"`
+}
+
+func (q *Queries) UpdateFestival(ctx context.Context, arg UpdateFestivalParams) (Festival, error) {
+	row := q.db.QueryRow(ctx, updateFestival,
+		arg.ID,
+		arg.Slug,
+		arg.Name,
+		arg.DateType,
+		arg.Region,
+		arg.HeritageType,
+		arg.FestivalType,
+		arg.Summary,
+		arg.Story,
+		arg.WhatToExpect,
+		arg.HowToParticipate,
+		arg.PracticalInfo,
+		arg.CoverImageUrl,
+		arg.GalleryImages,
+		arg.VideoEmbeds,
+		arg.IsPublished,
+	)
+	var i Festival
+	err := row.Scan(
+		&i.ID,
+		&i.Slug,
+		&i.Name,
+		&i.DateType,
+		&i.Region,
+		&i.HeritageType,
+		&i.FestivalType,
+		&i.Summary,
+		&i.Story,
+		&i.WhatToExpect,
+		&i.HowToParticipate,
+		&i.PracticalInfo,
+		&i.CoverImageUrl,
+		&i.GalleryImages,
+		&i.VideoEmbeds,
+		&i.IsPublished,
+		&i.CreatedAt,
+	)
+	return i, err
 }
