@@ -10,6 +10,7 @@ import (
     "github.com/labstack/echo/v4"
 )
 
+
 type SubscribeRequest struct {
     Email        string `json:"email"`
     DigestWeekly bool   `json:"digest_weekly"`
@@ -31,11 +32,18 @@ func (h *Handler) Subscribe(c echo.Context) error {
         Email:        req.Email,
         DigestWeekly: req.DigestWeekly,
     })
+    if errors.Is(err, service.ErrEmailAlreadyExists) {
+        // Return success anyway - don't reveal if email exists for privacy
+        return c.JSON(http.StatusOK, map[string]any{
+            "message": "if this email is not already subscribed, you will receive a confirmation email",
+            "id":      sub.ID,
+        })
+    }
     if err != nil {
         return echo.NewHTTPError(http.StatusInternalServerError, "failed to create subscription")
     }
 
-    return c.JSON(http.StatusCreated, map[string]interface{}{
+    return c.JSON(http.StatusCreated, map[string]any{
         "message": "subscription created, please check your email to confirm",
         "id":      sub.ID,
     })
