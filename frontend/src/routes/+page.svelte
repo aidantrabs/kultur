@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import { FestivalCard } from '$lib/components/calendar';
+	import { NewsletterSignup } from '$lib/components/newsletter';
 	import { festivals, getThisWeekFestivals } from '$lib/data/festivals';
 	import { heritageLabels } from '$lib/types/festival';
 
@@ -189,6 +190,20 @@
 		</div>
 	</section>
 
+	<!-- CTA Section -->
+	<section class="bg-tt-red text-white py-12">
+		<div class="container max-w-6xl mx-auto px-4 text-center">
+			<h2 class="text-2xl lg:text-3xl font-bold mb-4">Ready to Explore?</h2>
+			<p class="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
+				Whether you're a first-timer, returning local, or curious visitor,
+				find your next authentic cultural experience.
+			</p>
+			<Button href="/festivals" size="lg" class="bg-white text-tt-red hover:bg-gray-100">
+				Browse the Festival Calendar
+			</Button>
+		</div>
+	</section>
+
 	<!-- Featured Festivals -->
 	<section class="container max-w-6xl mx-auto px-4 py-12">
 		<h2 class="text-2xl lg:text-3xl font-bold mb-6">Featured Festivals</h2>
@@ -204,19 +219,8 @@
 		</div>
 	</section>
 
-	<!-- CTA Section -->
-	<section class="bg-tt-red text-white py-12">
-		<div class="container max-w-6xl mx-auto px-4 text-center">
-			<h2 class="text-2xl lg:text-3xl font-bold mb-4">Ready to Explore?</h2>
-			<p class="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
-				Whether you're a first-timer, returning local, or curious visitor, 
-				find your next authentic cultural experience.
-			</p>
-			<Button href="/festivals" size="lg" class="bg-white text-tt-red hover:bg-gray-100">
-				Browse the Festival Calendar
-			</Button>
-		</div>
-	</section>
+	<!-- Newsletter Signup Section -->
+	<NewsletterSignup variant="hero" />
 
 	<!-- Footer -->
 	<footer class="border-t bg-card">
