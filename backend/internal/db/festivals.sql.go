@@ -18,25 +18,25 @@ INSERT INTO festivals (
     cover_image_url, gallery_images, video_embeds, is_published
 ) VALUES (
     $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15
-) RETURNING id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at
+) RETURNING id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at, usual_month, date_2026_start, date_2026_end
 `
 
 type CreateFestivalParams struct {
 	Slug             string      `json:"slug"`
 	Name             string      `json:"name"`
-	DateType         string      `json:"date_type"`
+	DateType         string      `json:"dateType"`
 	Region           string      `json:"region"`
-	HeritageType     string      `json:"heritage_type"`
-	FestivalType     string      `json:"festival_type"`
+	HeritageType     string      `json:"heritageType"`
+	FestivalType     string      `json:"festivalType"`
 	Summary          string      `json:"summary"`
 	Story            pgtype.Text `json:"story"`
-	WhatToExpect     pgtype.Text `json:"what_to_expect"`
-	HowToParticipate pgtype.Text `json:"how_to_participate"`
-	PracticalInfo    pgtype.Text `json:"practical_info"`
-	CoverImageUrl    pgtype.Text `json:"cover_image_url"`
-	GalleryImages    []byte      `json:"gallery_images"`
-	VideoEmbeds      []byte      `json:"video_embeds"`
-	IsPublished      pgtype.Bool `json:"is_published"`
+	WhatToExpect     pgtype.Text `json:"whatToExpect"`
+	HowToParticipate pgtype.Text `json:"howToParticipate"`
+	PracticalInfo    pgtype.Text `json:"practicalInfo"`
+	CoverImageUrl    pgtype.Text `json:"coverImageUrl"`
+	GalleryImages    []byte      `json:"galleryImages"`
+	VideoEmbeds      []byte      `json:"videoEmbeds"`
+	IsPublished      pgtype.Bool `json:"isPublished"`
 }
 
 func (q *Queries) CreateFestival(ctx context.Context, arg CreateFestivalParams) (Festival, error) {
@@ -76,6 +76,9 @@ func (q *Queries) CreateFestival(ctx context.Context, arg CreateFestivalParams) 
 		&i.VideoEmbeds,
 		&i.IsPublished,
 		&i.CreatedAt,
+		&i.UsualMonth,
+		&i.Date2026Start,
+		&i.Date2026End,
 	)
 	return i, err
 }
@@ -91,7 +94,7 @@ func (q *Queries) DeleteFestival(ctx context.Context, id pgtype.UUID) error {
 }
 
 const getFestivalByID = `-- name: GetFestivalByID :one
-SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
+SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at, usual_month, date_2026_start, date_2026_end FROM festivals
 WHERE id = $1
 `
 
@@ -116,12 +119,15 @@ func (q *Queries) GetFestivalByID(ctx context.Context, id pgtype.UUID) (Festival
 		&i.VideoEmbeds,
 		&i.IsPublished,
 		&i.CreatedAt,
+		&i.UsualMonth,
+		&i.Date2026Start,
+		&i.Date2026End,
 	)
 	return i, err
 }
 
 const getFestivalBySlug = `-- name: GetFestivalBySlug :one
-SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
+SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at, usual_month, date_2026_start, date_2026_end FROM festivals
 WHERE slug = $1 AND is_published = true
 `
 
@@ -146,12 +152,15 @@ func (q *Queries) GetFestivalBySlug(ctx context.Context, slug string) (Festival,
 		&i.VideoEmbeds,
 		&i.IsPublished,
 		&i.CreatedAt,
+		&i.UsualMonth,
+		&i.Date2026Start,
+		&i.Date2026End,
 	)
 	return i, err
 }
 
 const listFestivals = `-- name: ListFestivals :many
-SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
+SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at, usual_month, date_2026_start, date_2026_end FROM festivals
 WHERE is_published = true
 ORDER BY name ASC
 `
@@ -183,6 +192,9 @@ func (q *Queries) ListFestivals(ctx context.Context) ([]Festival, error) {
 			&i.VideoEmbeds,
 			&i.IsPublished,
 			&i.CreatedAt,
+			&i.UsualMonth,
+			&i.Date2026Start,
+			&i.Date2026End,
 		); err != nil {
 			return nil, err
 		}
@@ -195,7 +207,7 @@ func (q *Queries) ListFestivals(ctx context.Context) ([]Festival, error) {
 }
 
 const listFestivalsByHeritage = `-- name: ListFestivalsByHeritage :many
-SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
+SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at, usual_month, date_2026_start, date_2026_end FROM festivals
 WHERE is_published = true AND heritage_type = $1
 ORDER BY name ASC
 `
@@ -227,6 +239,9 @@ func (q *Queries) ListFestivalsByHeritage(ctx context.Context, heritageType stri
 			&i.VideoEmbeds,
 			&i.IsPublished,
 			&i.CreatedAt,
+			&i.UsualMonth,
+			&i.Date2026Start,
+			&i.Date2026End,
 		); err != nil {
 			return nil, err
 		}
@@ -239,7 +254,7 @@ func (q *Queries) ListFestivalsByHeritage(ctx context.Context, heritageType stri
 }
 
 const listFestivalsByRegion = `-- name: ListFestivalsByRegion :many
-SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at FROM festivals
+SELECT id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at, usual_month, date_2026_start, date_2026_end FROM festivals
 WHERE is_published = true AND region = $1
 ORDER BY name ASC
 `
@@ -271,6 +286,9 @@ func (q *Queries) ListFestivalsByRegion(ctx context.Context, region string) ([]F
 			&i.VideoEmbeds,
 			&i.IsPublished,
 			&i.CreatedAt,
+			&i.UsualMonth,
+			&i.Date2026Start,
+			&i.Date2026End,
 		); err != nil {
 			return nil, err
 		}
@@ -300,26 +318,26 @@ UPDATE festivals SET
     video_embeds = $15,
     is_published = $16
 WHERE id = $1
-RETURNING id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at
+RETURNING id, slug, name, date_type, region, heritage_type, festival_type, summary, story, what_to_expect, how_to_participate, practical_info, cover_image_url, gallery_images, video_embeds, is_published, created_at, usual_month, date_2026_start, date_2026_end
 `
 
 type UpdateFestivalParams struct {
 	ID               pgtype.UUID `json:"id"`
 	Slug             string      `json:"slug"`
 	Name             string      `json:"name"`
-	DateType         string      `json:"date_type"`
+	DateType         string      `json:"dateType"`
 	Region           string      `json:"region"`
-	HeritageType     string      `json:"heritage_type"`
-	FestivalType     string      `json:"festival_type"`
+	HeritageType     string      `json:"heritageType"`
+	FestivalType     string      `json:"festivalType"`
 	Summary          string      `json:"summary"`
 	Story            pgtype.Text `json:"story"`
-	WhatToExpect     pgtype.Text `json:"what_to_expect"`
-	HowToParticipate pgtype.Text `json:"how_to_participate"`
-	PracticalInfo    pgtype.Text `json:"practical_info"`
-	CoverImageUrl    pgtype.Text `json:"cover_image_url"`
-	GalleryImages    []byte      `json:"gallery_images"`
-	VideoEmbeds      []byte      `json:"video_embeds"`
-	IsPublished      pgtype.Bool `json:"is_published"`
+	WhatToExpect     pgtype.Text `json:"whatToExpect"`
+	HowToParticipate pgtype.Text `json:"howToParticipate"`
+	PracticalInfo    pgtype.Text `json:"practicalInfo"`
+	CoverImageUrl    pgtype.Text `json:"coverImageUrl"`
+	GalleryImages    []byte      `json:"galleryImages"`
+	VideoEmbeds      []byte      `json:"videoEmbeds"`
+	IsPublished      pgtype.Bool `json:"isPublished"`
 }
 
 func (q *Queries) UpdateFestival(ctx context.Context, arg UpdateFestivalParams) (Festival, error) {
@@ -360,6 +378,9 @@ func (q *Queries) UpdateFestival(ctx context.Context, arg UpdateFestivalParams) 
 		&i.VideoEmbeds,
 		&i.IsPublished,
 		&i.CreatedAt,
+		&i.UsualMonth,
+		&i.Date2026Start,
+		&i.Date2026End,
 	)
 	return i, err
 }

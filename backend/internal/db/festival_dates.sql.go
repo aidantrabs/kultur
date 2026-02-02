@@ -20,11 +20,11 @@ INSERT INTO festival_dates (
 `
 
 type CreateFestivalDateParams struct {
-	FestivalID  pgtype.UUID `json:"festival_id"`
+	FestivalID  pgtype.UUID `json:"festivalId"`
 	Year        int32       `json:"year"`
-	StartDate   pgtype.Date `json:"start_date"`
-	EndDate     pgtype.Date `json:"end_date"`
-	IsTentative pgtype.Bool `json:"is_tentative"`
+	StartDate   pgtype.Date `json:"startDate"`
+	EndDate     pgtype.Date `json:"endDate"`
+	IsTentative pgtype.Bool `json:"isTentative"`
 }
 
 func (q *Queries) CreateFestivalDate(ctx context.Context, arg CreateFestivalDateParams) (FestivalDate, error) {
@@ -74,7 +74,7 @@ WHERE festival_id = $1 AND year = $2
 `
 
 type GetFestivalDateByYearParams struct {
-	FestivalID pgtype.UUID `json:"festival_id"`
+	FestivalID pgtype.UUID `json:"festivalId"`
 	Year       int32       `json:"year"`
 }
 
@@ -137,17 +137,17 @@ ORDER BY fd.start_date ASC
 
 type ListFestivalDatesByYearRow struct {
 	ID           pgtype.UUID        `json:"id"`
-	FestivalID   pgtype.UUID        `json:"festival_id"`
+	FestivalID   pgtype.UUID        `json:"festivalId"`
 	Year         int32              `json:"year"`
-	StartDate    pgtype.Date        `json:"start_date"`
-	EndDate      pgtype.Date        `json:"end_date"`
-	IsTentative  pgtype.Bool        `json:"is_tentative"`
-	CreatedAt    pgtype.Timestamptz `json:"created_at"`
+	StartDate    pgtype.Date        `json:"startDate"`
+	EndDate      pgtype.Date        `json:"endDate"`
+	IsTentative  pgtype.Bool        `json:"isTentative"`
+	CreatedAt    pgtype.Timestamptz `json:"createdAt"`
 	Slug         string             `json:"slug"`
 	Name         string             `json:"name"`
 	Region       string             `json:"region"`
-	HeritageType string             `json:"heritage_type"`
-	FestivalType string             `json:"festival_type"`
+	HeritageType string             `json:"heritageType"`
+	FestivalType string             `json:"festivalType"`
 	Summary      string             `json:"summary"`
 }
 
@@ -197,17 +197,17 @@ ORDER BY fd.start_date ASC
 
 type ListUpcomingFestivalDatesRow struct {
 	ID           pgtype.UUID        `json:"id"`
-	FestivalID   pgtype.UUID        `json:"festival_id"`
+	FestivalID   pgtype.UUID        `json:"festivalId"`
 	Year         int32              `json:"year"`
-	StartDate    pgtype.Date        `json:"start_date"`
-	EndDate      pgtype.Date        `json:"end_date"`
-	IsTentative  pgtype.Bool        `json:"is_tentative"`
-	CreatedAt    pgtype.Timestamptz `json:"created_at"`
+	StartDate    pgtype.Date        `json:"startDate"`
+	EndDate      pgtype.Date        `json:"endDate"`
+	IsTentative  pgtype.Bool        `json:"isTentative"`
+	CreatedAt    pgtype.Timestamptz `json:"createdAt"`
 	Slug         string             `json:"slug"`
 	Name         string             `json:"name"`
 	Region       string             `json:"region"`
-	HeritageType string             `json:"heritage_type"`
-	FestivalType string             `json:"festival_type"`
+	HeritageType string             `json:"heritageType"`
+	FestivalType string             `json:"festivalType"`
 	Summary      string             `json:"summary"`
 }
 
@@ -256,9 +256,9 @@ RETURNING id, festival_id, year, start_date, end_date, is_tentative, created_at
 
 type UpdateFestivalDateParams struct {
 	ID          pgtype.UUID `json:"id"`
-	StartDate   pgtype.Date `json:"start_date"`
-	EndDate     pgtype.Date `json:"end_date"`
-	IsTentative pgtype.Bool `json:"is_tentative"`
+	StartDate   pgtype.Date `json:"startDate"`
+	EndDate     pgtype.Date `json:"endDate"`
+	IsTentative pgtype.Bool `json:"isTentative"`
 }
 
 func (q *Queries) UpdateFestivalDate(ctx context.Context, arg UpdateFestivalDateParams) (FestivalDate, error) {

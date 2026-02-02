@@ -32,10 +32,10 @@ INSERT INTO subscriptions (
 
 type CreateSubscriptionParams struct {
 	Email             string      `json:"email"`
-	DigestWeekly      pgtype.Bool `json:"digest_weekly"`
-	FestivalReminders []byte      `json:"festival_reminders"`
-	ConfirmationToken pgtype.Text `json:"confirmation_token"`
-	UnsubscribeToken  string      `json:"unsubscribe_token"`
+	DigestWeekly      pgtype.Bool `json:"digestWeekly"`
+	FestivalReminders []byte      `json:"festivalReminders"`
+	ConfirmationToken pgtype.Text `json:"confirmationToken"`
+	UnsubscribeToken  string      `json:"unsubscribeToken"`
 }
 
 func (q *Queries) CreateSubscription(ctx context.Context, arg CreateSubscriptionParams) (Subscription, error) {

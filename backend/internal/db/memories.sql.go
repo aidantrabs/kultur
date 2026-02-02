@@ -20,11 +20,11 @@ INSERT INTO memories (
 `
 
 type CreateMemoryParams struct {
-	FestivalID   pgtype.UUID `json:"festival_id"`
-	AuthorName   pgtype.Text `json:"author_name"`
-	AuthorEmail  pgtype.Text `json:"author_email"`
+	FestivalID   pgtype.UUID `json:"festivalId"`
+	AuthorName   pgtype.Text `json:"authorName"`
+	AuthorEmail  pgtype.Text `json:"authorEmail"`
 	Content      string      `json:"content"`
-	YearOfMemory pgtype.Text `json:"year_of_memory"`
+	YearOfMemory pgtype.Text `json:"yearOfMemory"`
 }
 
 func (q *Queries) CreateMemory(ctx context.Context, arg CreateMemoryParams) (Memory, error) {
