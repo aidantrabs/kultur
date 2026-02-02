@@ -56,7 +56,11 @@ func (s *SubscriptionService) Create(ctx context.Context, params CreateSubscript
         return db.Subscription{}, err
     }
 
-    if err := s.email.SendConfirmation(params.Email, confirmToken); err != nil {
+    if err := s.queries.ConfirmSubscription(ctx, sub.ID); err != nil {
+        // log error but don't fail the request
+    }
+
+    if err := s.email.SendWelcome(params.Email, unsubToken); err != nil {
         // log error but don't fail the request
     }
 
